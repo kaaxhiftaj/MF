@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">MF</string>
+    <string name="btn_ok">OK</string>
+    <string name="fb_id">1775634272744153</string>
+    <string name="fb_login_protocol_scheme">fb1775634272744153</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">NEW</string>
+    <string name="hell_blank_fragment">TREND</string>
+    <string name="hel_blank_fragment">MY</string>
+
+    <string name="month">MONTH</string>
+    <string name="week">WEEK</string>
+    <string name="all">ALL TIME</string>
+</resources>
