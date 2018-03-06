@@ -21,8 +21,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.techease.mf.R;
-import com.techease.mf.ui.adapters.NewAdapter;
-import com.techease.mf.ui.models.NewModel;
+import com.techease.mf.ui.adapters.AllTimeAdapter;
+import com.techease.mf.ui.adapters.MyLikesAdapter;
+import com.techease.mf.ui.models.AllTimeModel;
+import com.techease.mf.ui.models.MyLikesModel;
 import com.techease.mf.utils.AlertsUtils;
 import com.techease.mf.utils.Configuration;
 import com.techease.mf.utils.InternetUtils;
@@ -39,42 +41,42 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class NewFragment extends Fragment {
+
+public class AllTime extends Fragment {
 
     android.support.v7.app.AlertDialog alertDialog;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
-    String email;
-    ArrayList<NewModel> new_model_list;
-    NewAdapter new_adapter;
-
+    String email, user_id;
+    ArrayList<AllTimeModel> all_model_list;
+    AllTimeAdapter all_adapter;
     Unbinder unbinder;
-
-    @BindView(R.id.rv_new)
+    @BindView(R.id.rv_alltime)
     RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_new, container, false);
+        View v = inflater.inflate(R.layout.fragment_all_time, container, false);
         unbinder = ButterKnife.bind(this, v);
 
         sharedPreferences = getActivity().getSharedPreferences(Configuration.MY_PREF, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         email = sharedPreferences.getString("email", "");
+        user_id = sharedPreferences.getString("user_id", "");
 
 
         if (InternetUtils.isNetworkConnected(getActivity())) {
 
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            new_model_list = new ArrayList<>();
+            all_model_list = new ArrayList<>();
             apicall();
             if (alertDialog == null)
                 alertDialog = AlertsUtils.createProgressDialog(getActivity());
             alertDialog.show();
-            new_adapter = new NewAdapter(getActivity(), new_model_list);
-            recyclerView.setAdapter(new_adapter);
+            all_adapter = new AllTimeAdapter(getActivity(), all_model_list);
+            recyclerView.setAdapter(all_adapter);
 
         } else {
             Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_SHORT).show();
@@ -86,7 +88,7 @@ public class NewFragment extends Fragment {
 
 
     private void apicall() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://menfashion.techeasesol.com/restapi/collection"
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://menfashion.techeasesol.com/restapi/collectionTrending"
                 , new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -99,7 +101,7 @@ public class NewFragment extends Fragment {
                         for (int i = 0; i < jsonArr.length(); i++) {
                             JSONObject temp = jsonArr.getJSONObject(i);
 
-                            NewModel model = new NewModel();
+                            AllTimeModel model = new AllTimeModel();
                             String id = temp.getString("id");
                             String name = temp.getString("name");
                             String image = temp.getString("image");
@@ -109,11 +111,11 @@ public class NewFragment extends Fragment {
                             model.setName(name);
                             model.setImage(image);
                             model.setNoLikes(like);
-                            new_model_list.add(model);
+                            all_model_list.add(model);
 
 
                         }
-                        new_adapter.notifyDataSetChanged();
+                        all_adapter.notifyDataSetChanged();
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -153,7 +155,7 @@ public class NewFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("email", email);
+                params.put("user_id", user_id);
                 return params;
             }
 

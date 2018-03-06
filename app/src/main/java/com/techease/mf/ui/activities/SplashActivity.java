@@ -35,7 +35,7 @@ public class SplashActivity extends AppCompatActivity {
 
         sharedPreferences = SplashActivity.this.getSharedPreferences(Configuration.MY_PREF, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        token = sharedPreferences.getString("token","ghj");
+        token = sharedPreferences.getString("token","");
 
         if (token.equals("")) {
             Window window = this.getWindow();

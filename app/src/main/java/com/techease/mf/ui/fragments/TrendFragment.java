@@ -1,6 +1,7 @@
 package com.techease.mf.ui.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -11,18 +12,30 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import com.techease.mf.R;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 public class TrendFragment extends Fragment {
+
+    ViewPager viewPager;
+    Unbinder unbinder;
+    android.support.v7.app.AlertDialog alertDialog;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_trend, container, false);
-        ViewPager viewPager = (ViewPager) v.findViewById(R.id.viewpager);
+        unbinder = ButterKnife.bind(this,v);
+        ViewPager viewPager = (ViewPager) v.findViewById(R.id.viewpage);
+
 
         // Create an adapter that knows which fragment should be shown on each page
         SimpleFragmentPager adapter = new SimpleFragmentPager(getActivity(), getActivity().getSupportFragmentManager());
@@ -31,7 +44,7 @@ public class TrendFragment extends Fragment {
         viewPager.setAdapter(adapter);
 
         // Give the TabLayout the ViewPager
-        TabLayout tabLayout = (TabLayout) v.findViewById(R.id.sliding_tabs);
+        TabLayout tabLayout = (TabLayout) v.findViewById(R.id.sliding_tab);
         tabLayout.setupWithViewPager(viewPager);
 
     return v;
@@ -52,15 +65,14 @@ public class TrendFragment extends Fragment {
         @Override
         public Fragment getItem(int position) {
             if (position == 0) {
-                return new NewFragment();
+                return new ThisMonth();
             } else if (position == 1) {
-                return new NewFragment();
-
+                return new ThisWeek();
             } else if (position == 2) {
-                return new MyLikesFragment();
+                return new AllTime();
 
             } else {
-                return new NewFragment();
+                return new TrendFragment();
             }
         }
 

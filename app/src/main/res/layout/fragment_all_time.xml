@@ -2,15 +2,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.techease.mf.ui.fragments.MyLikesFragment">
+    tools:context="com.techease.mf.ui.fragments.AllTime">
 
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/rv_myLikes"
-        ></android.support.v7.widget.RecyclerView>
+        android:id="@+id/rv_alltime"
+        >
 
+    </android.support.v7.widget.RecyclerView>
 </LinearLayout>

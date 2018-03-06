@@ -8,13 +8,13 @@
     tools:context="com.techease.mf.ui.fragments.TrendFragment">
 
     <android.support.design.widget.TabLayout
-        android:id="@+id/sliding_tabs"
+        android:id="@+id/sliding_tab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:tabMode="fixed" />
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
+        android:id="@+id/viewpage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white" />
