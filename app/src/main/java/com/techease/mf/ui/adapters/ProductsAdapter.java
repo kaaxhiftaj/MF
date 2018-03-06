@@ -1,6 +1,7 @@
 package com.techease.mf.ui.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,7 +19,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.techease.mf.R;
+import com.techease.mf.ui.activities.WebviewActivity;
+import com.techease.mf.ui.fragments.ProductsFragment;
 import com.techease.mf.ui.models.ProductsModel;
 import com.techease.mf.utils.Configuration;
 import java.util.ArrayList;
@@ -45,7 +49,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyView
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View rootView = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_new, parent, false);
+        View rootView = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_products, parent, false);
 
         sharedPreferences = context.getSharedPreferences(Configuration.MY_PREF, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -58,17 +62,20 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyView
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         final ProductsModel model= productArrayList.get(position);
 
-//        holder.noLikes.setText(model.getNoLikes()+ " Likes");
-//        Glide.with(context).load(model.getImage()).into(holder.item_image);
-//
-//        holder.like.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                collection_id = model.getId();
-//                apicall();
-//            }
-//        });
+        holder.price.setText(model.getPrice()+ "$");
+        Glide.with(context).load(model.getImage()).into(holder.image);
+
+        holder.amzaon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String collection_id = model.getId();
+
+                Intent i = new Intent(context ,WebviewActivity.class);
+                i.putExtra("link", model.getLink());
+                context.startActivity(i);
+            }
+        });
 
     }
 
@@ -82,17 +89,16 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
 
-        TextView noLikes;
-        ImageView item_image ;
-        ImageButton share, like;
+        TextView price;
+        ImageView image ;
+        ImageButton amzaon;
 
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            noLikes =(TextView)itemView.findViewById(R.id.noLikes);
-            share=(ImageButton) itemView.findViewById(R.id.share);
-            like = (ImageButton) itemView.findViewById(R.id.like);
-            item_image = (ImageView) itemView.findViewById(R.id.item_image);
+            price =(TextView)itemView.findViewById(R.id.product_price);
+            amzaon = (ImageButton) itemView.findViewById(R.id.amazon);
+            image = (ImageView) itemView.findViewById(R.id.product_image);
 
         }
 
