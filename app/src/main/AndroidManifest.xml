@@ -54,7 +54,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activities.FullScreenActivity" />
-        <activity android:name=".ui.activities.WebviewActivity"></activity>
+        <activity android:name=".ui.activities.WebviewActivity" />
+        <activity android:name=".ui.activities.Profile"></activity>
     </application>
 
 </manifest>

@@ -1,6 +1,7 @@
 package com.techease.mf.ui.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -10,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -21,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.techease.mf.R;
+import com.techease.mf.ui.activities.Profile;
 import com.techease.mf.ui.adapters.AllTimeAdapter;
 import com.techease.mf.ui.adapters.ProductsAdapter;
 import com.techease.mf.ui.models.AllTimeModel;
@@ -51,7 +55,7 @@ public class ProductsFragment extends AppCompatActivity {
     ArrayList<ProductsModel> products_model_list;
     ProductsAdapter product_adapter;
     Unbinder unbinder;
-    String collection_id ;
+    String collection_id;
     @BindView(R.id.rv_products)
     RecyclerView recyclerView;
 
@@ -66,6 +70,8 @@ public class ProductsFragment extends AppCompatActivity {
         editor = sharedPreferences.edit();
         email = sharedPreferences.getString("email", "");
         user_id = sharedPreferences.getString("user_id", "");
+
+        customActionBar();
 
         collection_id = getIntent().getExtras().getString("collection_id");
 
@@ -171,4 +177,48 @@ public class ProductsFragment extends AppCompatActivity {
     }
 
 
+    public void customActionBar() {
+        if (user_id.equals("")){
+        android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(false);
+        LayoutInflater mInflater = LayoutInflater.from(ProductsFragment.this);
+        View mCustomView = mInflater.inflate(R.layout.custom_actionbar, null);
+        TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.title_text);
+        ImageButton profile = (ImageButton) mCustomView.findViewById(R.id.profile);
+        profile.setVisibility(View.INVISIBLE);
+        //mTitleTextView.setText("Products");
+        mActionBar.setCustomView(mCustomView);
+        mActionBar.setDisplayShowCustomEnabled(true);
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
+                mActionBar.setDisplayShowCustomEnabled(false);
+                startActivity(new Intent(ProductsFragment.this, Profile.class));
+            }
+        });
+    }
+    else {
+
+        android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(false);
+        LayoutInflater mInflater = LayoutInflater.from(ProductsFragment.this);
+        View mCustomView = mInflater.inflate(R.layout.custom_actionbar, null);
+        TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.title_text);
+        ImageButton profile = (ImageButton) mCustomView.findViewById(R.id.profile);
+       // mTitleTextView.setText("Products");
+        mActionBar.setCustomView(mCustomView);
+        mActionBar.setDisplayShowCustomEnabled(true);
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
+                mActionBar.setDisplayShowCustomEnabled(false);
+                startActivity(new Intent(ProductsFragment.this, Profile.class));
+            }
+        });
+    }
+    }
 }

@@ -81,8 +81,13 @@ public class NewAdapter extends RecyclerView.Adapter<NewAdapter.MyViewHolder> {
             @Override
             public void onClick(View v) {
 
+
                 collection_id = model.getId();
-                apicall();
+                if (!user_id.equals("")) {
+                    apicall();
+                }else {
+                    Toast.makeText(context, "Please Login First", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

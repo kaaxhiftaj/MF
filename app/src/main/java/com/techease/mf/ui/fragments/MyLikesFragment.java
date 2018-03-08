@@ -72,14 +72,19 @@ public class MyLikesFragment extends Fragment {
 
         if (InternetUtils.isNetworkConnected(getActivity())) {
 
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            myLikes_model_list = new ArrayList<>();
-            apicall();
-            if (alertDialog == null)
-                alertDialog = AlertsUtils.createProgressDialog(getActivity());
-            alertDialog.show();
-            myLikes_adapter = new MyLikesAdapter(getActivity(), myLikes_model_list);
-            recyclerView.setAdapter(myLikes_adapter);
+            if (!user_id.equals("")) {
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                myLikes_model_list = new ArrayList<>();
+                apicall();
+                if (alertDialog == null)
+                    alertDialog = AlertsUtils.createProgressDialog(getActivity());
+                alertDialog.show();
+                myLikes_adapter = new MyLikesAdapter(getActivity(), myLikes_model_list);
+                recyclerView.setAdapter(myLikes_adapter);
+            }
+            else {
+                Toast.makeText(getActivity(), "You are not logged in", Toast.LENGTH_SHORT).show();
+            }
 
         } else {
             Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_SHORT).show();

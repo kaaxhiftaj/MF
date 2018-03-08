@@ -1,6 +1,7 @@
 package com.techease.mf.ui.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.techease.mf.R;
+import com.techease.mf.ui.fragments.ProductsFragment;
 import com.techease.mf.ui.models.MyLikesModel;
 import com.techease.mf.ui.models.NewModel;
 import com.techease.mf.utils.Configuration;
@@ -69,8 +71,26 @@ public class MyLikesAdapter extends RecyclerView.Adapter<MyLikesAdapter.MyViewHo
             @Override
             public void onClick(View v) {
 
+
                 collection_id = model.getId();
-                apicall();
+                if (!user_id.equals("")) {
+                    apicall();
+                }else {
+                    Toast.makeText(context, "Please Login First", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        holder.item_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String collection_id = model.getId();
+
+                Intent i = new Intent(context ,ProductsFragment.class);
+                i.putExtra("collection_id", collection_id);
+                context.startActivity(i);
+
             }
         });
 
