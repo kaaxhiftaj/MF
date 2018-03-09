@@ -62,7 +62,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyView
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         final ProductsModel model= productArrayList.get(position);
 
-        holder.price.setText(model.getPrice()+ "$");
+        holder.price.setText(model.getPrice());
         Glide.with(context).load(model.getImage()).into(holder.image);
 
         holder.amzaon.setOnClickListener(new View.OnClickListener() {

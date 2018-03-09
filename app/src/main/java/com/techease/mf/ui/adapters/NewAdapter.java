@@ -1,18 +1,14 @@
 package com.techease.mf.ui.adapters;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,16 +22,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.techease.mf.R;
-import com.techease.mf.ui.activities.FullScreenActivity;
-import com.techease.mf.ui.activities.HomeActivity;
 import com.techease.mf.ui.fragments.ProductsFragment;
 import com.techease.mf.ui.models.NewModel;
-import com.techease.mf.utils.AlertsUtils;
 import com.techease.mf.utils.Configuration;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;

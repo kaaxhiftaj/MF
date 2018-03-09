@@ -9,7 +9,10 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
+
 import com.techease.mf.R;
 import com.techease.mf.ui.fragments.MyLikesFragment;
 import com.techease.mf.ui.fragments.NewFragment;
@@ -29,11 +32,16 @@ public class HomeActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         unbinder = ButterKnife.bind(this);
+
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.custom_main_actionbar);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
 

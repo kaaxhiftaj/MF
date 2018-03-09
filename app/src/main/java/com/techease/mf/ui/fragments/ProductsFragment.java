@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -65,6 +66,8 @@ public class ProductsFragment extends AppCompatActivity {
         setContentView(R.layout.fragment_products);
 
         unbinder = ButterKnife.bind(this);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.custom_main_actionbar);
 
         sharedPreferences = getSharedPreferences(Configuration.MY_PREF, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -179,25 +182,25 @@ public class ProductsFragment extends AppCompatActivity {
 
     public void customActionBar() {
         if (user_id.equals("")){
-        android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
-        mActionBar.setDisplayShowHomeEnabled(false);
-        mActionBar.setDisplayShowTitleEnabled(false);
-        LayoutInflater mInflater = LayoutInflater.from(ProductsFragment.this);
-        View mCustomView = mInflater.inflate(R.layout.custom_actionbar, null);
-        TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.title_text);
-        ImageButton profile = (ImageButton) mCustomView.findViewById(R.id.profile);
-        profile.setVisibility(View.INVISIBLE);
-        //mTitleTextView.setText("Products");
-        mActionBar.setCustomView(mCustomView);
-        mActionBar.setDisplayShowCustomEnabled(true);
-        profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
-                mActionBar.setDisplayShowCustomEnabled(false);
-                startActivity(new Intent(ProductsFragment.this, Profile.class));
-            }
-        });
+//        android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
+//        mActionBar.setDisplayShowHomeEnabled(false);
+//        mActionBar.setDisplayShowTitleEnabled(false);
+//        LayoutInflater mInflater = LayoutInflater.from(ProductsFragment.this);
+//        View mCustomView = mInflater.inflate(R.layout.custom_actionbar, null);
+//        TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.title_text);
+//        ImageButton profile = (ImageButton) mCustomView.findViewById(R.id.profile);
+//        profile.setVisibility(View.INVISIBLE);
+//        //mTitleTextView.setText("Products");
+//        mActionBar.setCustomView(mCustomView);
+//        mActionBar.setDisplayShowCustomEnabled(true);
+//        profile.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
+//                mActionBar.setDisplayShowCustomEnabled(false);
+//                startActivity(new Intent(ProductsFragment.this, Profile.class));
+//            }
+//        });
     }
     else {
 
