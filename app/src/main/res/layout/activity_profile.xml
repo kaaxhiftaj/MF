@@ -14,14 +14,32 @@
     <ImageView
         android:layout_width="160dp"
         android:layout_height="160dp"
-        android:src="@drawable/mf"
+        android:src="@drawable/logo_grey"
+        android:id="@+id/mfLogo"
         />
 
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_button"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+       />
+
+
     <ImageView
-        android:layout_width="160dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:src="@drawable/logout"
         android:id="@+id/logout"
         />
+
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/logoutText"
+        android:textSize="10dp"
+        android:text="Um alle Funktionen der Men's Fashion-App nutzen zu können, musst du dich mit Facebook einloggen."
+        />
+
 
 </LinearLayout>

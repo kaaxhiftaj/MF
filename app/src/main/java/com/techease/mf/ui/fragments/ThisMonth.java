@@ -104,11 +104,15 @@ public class ThisMonth extends Fragment {
                             String name = temp.getString("name");
                             String image = temp.getString("image");
                             String like = temp.getString("likes");
+                            String facebook = temp.getString("facebook");
+                            String liked = temp.getString("liked");
 
                             model.setId(id);
                             model.setName(name);
                             model.setImage(image);
                             model.setNoLikes(like);
+                            model.setFacebook(facebook);
+                            model.setLiked(liked);
                             all_model_list.add(model);
 
 
@@ -127,7 +131,7 @@ public class ThisMonth extends Fragment {
                             alertDialog.dismiss();
                         JSONObject jsonObject = new JSONObject(response);
                         String message = jsonObject.getString("message");
-                        AlertsUtils.showErrorDialog(getActivity(), message);
+                    //    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
 
                     } catch (JSONException e) {
                         e.printStackTrace();

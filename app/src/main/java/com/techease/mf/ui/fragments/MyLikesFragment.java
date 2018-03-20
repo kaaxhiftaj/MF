@@ -1,6 +1,7 @@
 package com.techease.mf.ui.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.techease.mf.R;
+import com.techease.mf.ui.activities.Profile;
 import com.techease.mf.ui.adapters.MyLikesAdapter;
 import com.techease.mf.ui.adapters.NewAdapter;
 import com.techease.mf.ui.models.MyLikesModel;
@@ -72,7 +74,6 @@ public class MyLikesFragment extends Fragment {
 
         if (InternetUtils.isNetworkConnected(getActivity())) {
 
-            if (!user_id.equals("")) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 myLikes_model_list = new ArrayList<>();
                 apicall();
@@ -82,11 +83,8 @@ public class MyLikesFragment extends Fragment {
                 myLikes_adapter = new MyLikesAdapter(getActivity(), myLikes_model_list);
                 recyclerView.setAdapter(myLikes_adapter);
             }
-            else {
-                Toast.makeText(getActivity(), "You are not logged in", Toast.LENGTH_SHORT).show();
-            }
 
-        } else {
+        else {
             Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_SHORT).show();
         }
 
@@ -114,11 +112,12 @@ public class MyLikesFragment extends Fragment {
                             String name = temp.getString("name");
                             String image = temp.getString("image");
                             String like = temp.getString("likes");
-
+                            String facebook = temp.getString("facebook");
                             model.setId(id);
                             model.setName(name);
                             model.setImage(image);
                             model.setNoLikes(like);
+                            model.setFacebook(facebook);
                             myLikes_model_list.add(model);
 
 
@@ -135,9 +134,11 @@ public class MyLikesFragment extends Fragment {
                     try {
                         if (alertDialog != null)
                             alertDialog.dismiss();
+                        startActivity(new Intent(getActivity(), Profile.class));
+
                         JSONObject jsonObject = new JSONObject(response);
                         String message = jsonObject.getString("message");
-                        AlertsUtils.showErrorDialog(getActivity(), message);
+                        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
 
                     } catch (JSONException e) {
                         e.printStackTrace();

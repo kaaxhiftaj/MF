@@ -37,12 +37,14 @@ public class SplashActivity extends AppCompatActivity {
         editor = sharedPreferences.edit();
         token = sharedPreferences.getString("token","");
 
-        if (token.equals("")) {
-            Window window = this.getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        Window window = this.getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
 
+
+
+        if (token.equals("")) {
 
             Thread timer = new Thread() {
                 public void run() {
@@ -54,7 +56,7 @@ public class SplashActivity extends AppCompatActivity {
                     } finally {
 
 
-                        startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                        startActivity(new Intent(SplashActivity.this, HomeActivity.class));
                         finish();
 
                     }
@@ -63,9 +65,23 @@ public class SplashActivity extends AppCompatActivity {
             timer.start();
         } else {
 
+            Thread timer = new Thread() {
+                public void run() {
+                    try {
+                        sleep(3000);
 
-            startActivity(new Intent(SplashActivity.this, HomeActivity.class));
-            finish();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } finally {
+
+
+                        startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+                        finish();
+
+                    }
+                }
+            };
+            timer.start();
 
         }
     }

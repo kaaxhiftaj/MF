@@ -67,13 +67,14 @@ public class MyLikesAdapter extends RecyclerView.Adapter<MyLikesAdapter.MyViewHo
         holder.noLikes.setText(model.getNoLikes()+ " Likes");
         Glide.with(context).load(model.getImage()).into(holder.item_image);
 
+
         holder.like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
                 collection_id = model.getId();
                 if (!user_id.equals("")) {
+                    holder.like.setImageResource(R.drawable.like);
                     apicall();
                 }else {
                     Toast.makeText(context, "Please Login First", Toast.LENGTH_SHORT).show();
@@ -91,6 +92,17 @@ public class MyLikesAdapter extends RecyclerView.Adapter<MyLikesAdapter.MyViewHo
                 i.putExtra("collection_id", collection_id);
                 context.startActivity(i);
 
+            }
+        });
+
+        holder.share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String message = model.getFacebook();
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.putExtra(Intent.EXTRA_TEXT, message);
+                context.startActivity(Intent.createChooser(share, "Share"));
             }
         });
 

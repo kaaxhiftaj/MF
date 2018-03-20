@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="#FFF"
     >
 
 
@@ -18,7 +19,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:weightSum="1"
             android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                >
 
             <ImageView
                 android:layout_width="150dp"
@@ -26,6 +35,8 @@
                 android:id="@+id/product_image"
                 android:scaleType="fitXY"
                 />
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -33,6 +44,7 @@
                 android:orientation="vertical"
                 android:layout_gravity="center"
                 android:gravity="center"
+                android:layout_weight="0.5"
                 android:layout_margin="1dp"
                 >
 
@@ -49,6 +61,7 @@
                 <ImageButton
                     android:id="@+id/amazon"
                     android:src="@drawable/amazaon"
+                    android:background="#FFF"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="45$ for one hour" />

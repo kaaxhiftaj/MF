@@ -11,6 +11,17 @@ public class AllTimeModel {
     String name;
     String image;
     String noLikes;
+    String facebook;
+    String liked ;
+
+    public String getFacebook() {
+        return facebook;
+    }
+
+    public void setFacebook(String facebook) {
+        this.facebook = facebook;
+    }
+
 
     public String getId() {
         return id;
@@ -45,7 +56,11 @@ public class AllTimeModel {
         this.noLikes = noLikes;
     }
 
+    public String getLiked() {
+        return liked;
+    }
 
-
-
+    public void setLiked(String liked) {
+        this.liked = liked;
+    }
 }

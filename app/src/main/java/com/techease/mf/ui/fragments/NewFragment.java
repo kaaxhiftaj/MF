@@ -1,15 +1,22 @@
 package com.techease.mf.ui.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -21,6 +28,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.techease.mf.R;
+import com.techease.mf.ui.activities.HomeActivity;
+import com.techease.mf.ui.activities.Profile;
 import com.techease.mf.ui.adapters.NewAdapter;
 import com.techease.mf.ui.models.NewModel;
 import com.techease.mf.utils.AlertsUtils;
@@ -44,7 +53,7 @@ public class NewFragment extends Fragment {
     android.support.v7.app.AlertDialog alertDialog;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
-    String email;
+    String email, user_id;
     ArrayList<NewModel> new_model_list;
     NewAdapter new_adapter;
 
@@ -63,6 +72,7 @@ public class NewFragment extends Fragment {
         sharedPreferences = getActivity().getSharedPreferences(Configuration.MY_PREF, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         email = sharedPreferences.getString("email", "");
+        user_id = sharedPreferences.getString("user_id", "");
 
 
         if (InternetUtils.isNetworkConnected(getActivity())) {
@@ -79,8 +89,7 @@ public class NewFragment extends Fragment {
         } else {
             Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_SHORT).show();
         }
-
-
+        customActionBar();
         return v;
     }
 
@@ -104,11 +113,14 @@ public class NewFragment extends Fragment {
                             String name = temp.getString("name");
                             String image = temp.getString("image");
                             String like = temp.getString("likes");
-
+                            String facebook = temp.getString("facebook");
+                            String liked = temp.getString("liked");
                             model.setId(id);
                             model.setName(name);
                             model.setImage(image);
+                            model.setFacebok(facebook);
                             model.setNoLikes(like);
+                            model.setLiked(liked);
                             new_model_list.add(model);
 
 
@@ -127,7 +139,7 @@ public class NewFragment extends Fragment {
                             alertDialog.dismiss();
                         JSONObject jsonObject = new JSONObject(response);
                         String message = jsonObject.getString("message");
-                        AlertsUtils.showErrorDialog(getActivity(), message);
+                        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -153,7 +165,7 @@ public class NewFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("email", email);
+                params.put("user_id", user_id);
                 return params;
             }
 
@@ -165,5 +177,26 @@ public class NewFragment extends Fragment {
         mRequestQueue.add(stringRequest);
     }
 
+    public void customActionBar() {
+        android.support.v7.app.ActionBar mActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        mActionBar.setDisplayHomeAsUpEnabled(false);
+        mActionBar.setHomeButtonEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(false);
+        mActionBar.setDisplayShowCustomEnabled(true);
+        LayoutInflater mInflater = LayoutInflater.from(getActivity());
+        View mCustomView = mInflater.inflate(R.layout.custom_main_actionbar, null);
+        ImageView ivMF = mCustomView.findViewById(R.id.iv_mf);
+        ImageButton profile = (ImageButton)mCustomView.findViewById(R.id.profile);
+        mActionBar.setCustomView(mCustomView);
+        mActionBar.setDisplayShowCustomEnabled(true);
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), Profile.class));
+            }
+        });
+
+    }
 
 }

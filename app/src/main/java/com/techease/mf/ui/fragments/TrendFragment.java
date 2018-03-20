@@ -12,9 +12,11 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TableLayout;
 import android.widget.Toast;
 
 import com.techease.mf.R;
+import com.techease.mf.ui.adapters.SimpleFragmentPager;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -22,11 +24,9 @@ import butterknife.Unbinder;
 
 public class TrendFragment extends Fragment {
 
-    ViewPager viewPager;
+
     Unbinder unbinder;
-    android.support.v7.app.AlertDialog alertDialog;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,58 +46,10 @@ public class TrendFragment extends Fragment {
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.sliding_tab);
         tabLayout.setupWithViewPager(viewPager);
+        TabLayout.Tab tab = tabLayout.getTabAt(0);
+        tab.select();
 
     return v;
     }
 
 }
-
-    class SimpleFragmentPager extends FragmentPagerAdapter {
-
-        private Context mContext;
-
-        public SimpleFragmentPager(Context context, FragmentManager fm) {
-            super(fm);
-            mContext = context;
-        }
-
-        // This determines the fragment for each tab
-        @Override
-        public Fragment getItem(int position) {
-            if (position == 0) {
-                return new ThisMonth();
-            } else if (position == 1) {
-                return new ThisWeek();
-            } else if (position == 2) {
-                return new AllTime();
-
-            } else {
-                return new TrendFragment();
-            }
-        }
-
-        // This determines the number of tabs
-        @Override
-        public int getCount() {
-            return 3;
-        }
-
-        // This determines the title for each tab
-        @Override
-        public CharSequence getPageTitle(int position) {
-            // Generate title based on item position
-            switch (position) {
-                case 0:
-                    return mContext.getString(R.string.month);
-                case 1:
-                    return mContext.getString(R.string.week);
-                case 2:
-                    return mContext.getString(R.string.all);
-
-                default:
-                    return null;
-            }
-        }
-
-    }
-

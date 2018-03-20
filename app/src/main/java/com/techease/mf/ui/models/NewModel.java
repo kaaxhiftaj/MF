@@ -11,6 +11,8 @@ public class NewModel {
     String name;
     String image;
     String noLikes;
+    String facebok ;
+    String liked;
 
     public String getId() {
         return id;
@@ -45,7 +47,19 @@ public class NewModel {
         this.noLikes = noLikes;
     }
 
+    public String getFacebok() {
+        return facebok;
+    }
 
+    public void setFacebok(String facebok) {
+        this.facebok = facebok;
+    }
 
+    public String getLiked() {
+        return liked;
+    }
 
+    public void setLiked(String liked) {
+        this.liked = liked;
+    }
 }

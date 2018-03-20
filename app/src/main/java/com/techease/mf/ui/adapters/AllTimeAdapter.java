@@ -3,12 +3,14 @@ package com.techease.mf.ui.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,12 +70,29 @@ public class AllTimeAdapter extends RecyclerView.Adapter<AllTimeAdapter.MyViewHo
         holder.noLikes.setText(model.getNoLikes()+ " Likes");
         Glide.with(context).load(model.getImage()).into(holder.item_image);
 
+        if (model.getLiked().equals("true")){
+
+         //   holder.like.setImageResource(R.drawable.like);
+            holder.like.setBackgroundColor(Color.parseColor("#000000"));
+            holder.likeLayout.setBackgroundColor(Color.parseColor("#000000"));
+            holder.share.setBackgroundColor(Color.parseColor("#000000"));
+
+        }else {
+        //    holder.like.setImageResource(R.drawable.unlike);
+            holder.like.setBackgroundColor(Color.parseColor("#535c68"));
+            holder.likeLayout.setBackgroundColor(Color.parseColor("#535c68"));
+            holder.share.setBackgroundColor(Color.parseColor("#535c68"));
+        }
+
         holder.like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 collection_id = model.getId();
                 if (!user_id.equals("")) {
+                    holder.like.setBackgroundColor(Color.parseColor("#000000"));
+                    holder.likeLayout.setBackgroundColor(Color.parseColor("#000000"));
+                    holder.share.setBackgroundColor(Color.parseColor("#000000"));
                     apicall();
                 }else {
                     Toast.makeText(context, "Please Login First", Toast.LENGTH_SHORT).show();
@@ -93,6 +112,17 @@ public class AllTimeAdapter extends RecyclerView.Adapter<AllTimeAdapter.MyViewHo
             }
         });
 
+        holder.share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String message = model.getFacebook();
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.putExtra(Intent.EXTRA_TEXT, message);
+                context.startActivity(Intent.createChooser(share, "Share"));
+            }
+        });
+
     }
 
     @Override
@@ -108,6 +138,7 @@ public class AllTimeAdapter extends RecyclerView.Adapter<AllTimeAdapter.MyViewHo
         TextView noLikes;
         ImageView item_image ;
         ImageButton share, like;
+        LinearLayout likeLayout;
 
 
         public MyViewHolder(View itemView) {
@@ -116,6 +147,7 @@ public class AllTimeAdapter extends RecyclerView.Adapter<AllTimeAdapter.MyViewHo
             share=(ImageButton) itemView.findViewById(R.id.share);
             like = (ImageButton) itemView.findViewById(R.id.like);
             item_image = (ImageView) itemView.findViewById(R.id.item_image);
+            likeLayout = (LinearLayout)itemView.findViewById(R.id.likeLayout);
 
         }
 
@@ -149,7 +181,7 @@ public class AllTimeAdapter extends RecyclerView.Adapter<AllTimeAdapter.MyViewHo
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("user_id", "user_id");
+                params.put("user_id", user_id);
                 params.put("collection_id", collection_id);
                 return params;
             }

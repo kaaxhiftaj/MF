@@ -25,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.techease.mf.R;
+import com.techease.mf.ui.activities.HomeActivity;
 import com.techease.mf.ui.activities.Profile;
 import com.techease.mf.ui.adapters.AllTimeAdapter;
 import com.techease.mf.ui.adapters.ProductsAdapter;
@@ -66,15 +67,13 @@ public class ProductsFragment extends AppCompatActivity {
         setContentView(R.layout.fragment_products);
 
         unbinder = ButterKnife.bind(this);
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setCustomView(R.layout.custom_main_actionbar);
+        customActionBar();
 
         sharedPreferences = getSharedPreferences(Configuration.MY_PREF, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         email = sharedPreferences.getString("email", "");
         user_id = sharedPreferences.getString("user_id", "");
 
-        customActionBar();
 
         collection_id = getIntent().getExtras().getString("collection_id");
 
@@ -93,6 +92,26 @@ public class ProductsFragment extends AppCompatActivity {
             Toast.makeText(ProductsFragment.this, "No Internet Connection", Toast.LENGTH_SHORT).show();
         }
 
+
+    }
+
+
+    public void customActionBar() {
+
+        android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        LayoutInflater mInflater = LayoutInflater.from(ProductsFragment.this);
+        View mCustomView = mInflater.inflate(R.layout.custom_main_actionbar, null);
+        ImageButton profile = (ImageButton) mCustomView.findViewById(R.id.profile);
+        mActionBar.setCustomView(mCustomView);
+        mActionBar.setDisplayShowCustomEnabled(true);
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
+                startActivity(new Intent(ProductsFragment.this, Profile.class));
+            }
+        });
 
     }
 
@@ -179,49 +198,4 @@ public class ProductsFragment extends AppCompatActivity {
         mRequestQueue.add(stringRequest);
     }
 
-
-    public void customActionBar() {
-        if (user_id.equals("")){
-//        android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
-//        mActionBar.setDisplayShowHomeEnabled(false);
-//        mActionBar.setDisplayShowTitleEnabled(false);
-//        LayoutInflater mInflater = LayoutInflater.from(ProductsFragment.this);
-//        View mCustomView = mInflater.inflate(R.layout.custom_actionbar, null);
-//        TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.title_text);
-//        ImageButton profile = (ImageButton) mCustomView.findViewById(R.id.profile);
-//        profile.setVisibility(View.INVISIBLE);
-//        //mTitleTextView.setText("Products");
-//        mActionBar.setCustomView(mCustomView);
-//        mActionBar.setDisplayShowCustomEnabled(true);
-//        profile.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
-//                mActionBar.setDisplayShowCustomEnabled(false);
-//                startActivity(new Intent(ProductsFragment.this, Profile.class));
-//            }
-//        });
-    }
-    else {
-
-        android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
-        mActionBar.setDisplayShowHomeEnabled(false);
-        mActionBar.setDisplayShowTitleEnabled(false);
-        LayoutInflater mInflater = LayoutInflater.from(ProductsFragment.this);
-        View mCustomView = mInflater.inflate(R.layout.custom_actionbar, null);
-        TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.title_text);
-        ImageButton profile = (ImageButton) mCustomView.findViewById(R.id.profile);
-       // mTitleTextView.setText("Products");
-        mActionBar.setCustomView(mCustomView);
-        mActionBar.setDisplayShowCustomEnabled(true);
-        profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
-                mActionBar.setDisplayShowCustomEnabled(false);
-                startActivity(new Intent(ProductsFragment.this, Profile.class));
-            }
-        });
-    }
-    }
 }

@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     >
 
@@ -30,8 +30,8 @@
             android:gravity="start|center"
             android:layout_width="match_parent"
             android:layout_height="45sp"
+            android:id="@+id/likeLayout"
             android:background="@color/colorPrimary"
-            android:alpha="0.3"
             android:orientation="horizontal">
 
 
@@ -67,6 +67,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:src="@drawable/like"
+                    android:background="@color/colorPrimary"
                     />
 
                 <ImageButton
@@ -74,8 +75,11 @@
                     android:layout_marginLeft="10dp"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/colorPrimary"
                     android:src="@drawable/share"
                     />
+
 
 
             </LinearLayout>

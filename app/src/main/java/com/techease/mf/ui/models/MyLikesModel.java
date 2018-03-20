@@ -11,6 +11,8 @@ public class MyLikesModel {
     String name;
     String image;
     String noLikes;
+    String facebook;
+
 
     public String getId() {
         return id;
@@ -45,7 +47,13 @@ public class MyLikesModel {
         this.noLikes = noLikes;
     }
 
+    public String getFacebook() {
+        return facebook;
+    }
 
+    public void setFacebook(String facebook) {
+        this.facebook = facebook;
+    }
 
 
 }
