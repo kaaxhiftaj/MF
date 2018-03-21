@@ -34,16 +34,16 @@ public class TrendFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_trend, container, false);
         unbinder = ButterKnife.bind(this,v);
-        ViewPager viewPager = (ViewPager) v.findViewById(R.id.viewpage);
+        ViewPager viewPager = v.findViewById(R.id.viewpage);
 
 
         // Create an adapter that knows which fragment should be shown on each page
         SimpleFragmentPager adapter = new SimpleFragmentPager(getActivity(), getActivity().getSupportFragmentManager());
-
-        // Set the adapter onto the view pager
+//
+//        // Set the adapter onto the view pager
         viewPager.setAdapter(adapter);
-
-        // Give the TabLayout the ViewPager
+//
+//        // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.sliding_tab);
         tabLayout.setupWithViewPager(viewPager);
         TabLayout.Tab tab = tabLayout.getTabAt(0);

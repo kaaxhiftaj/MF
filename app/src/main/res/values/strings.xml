@@ -14,4 +14,10 @@
     <string name="month">MONTH</string>
     <string name="week">WEEK</string>
     <string name="all">ALL TIME</string>
+    <string-array name="titles">
+        <item>Nav</item>
+        <item>Tab</item>
+        <item>Strip</item>
+    </string-array>
+
 </resources>

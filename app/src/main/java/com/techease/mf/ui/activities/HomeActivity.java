@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.techease.mf.R;
-import com.techease.mf.ui.adapters.HomeFragmentPagerAdapter;
 import com.techease.mf.ui.fragments.HomeTabFragment;
 
 import butterknife.ButterKnife;
@@ -23,27 +22,23 @@ import butterknife.Unbinder;
 public class HomeActivity extends AppCompatActivity {
 
 
-    ViewPager viewPager;
-    Unbinder unbinder;
-    android.support.v7.app.AlertDialog alertDialog;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        unbinder = ButterKnife.bind(this);
-       // customActionBar();
-
-       // getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-       // getSupportActionBar().setCustomView(R.layout.custom_main_actionbar);
-
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeTabFragment()).commit();
-
+       // unbinder = ButterKnife.bind(this);
+//        ViewPager viewPager = findViewById(R.id.viewpager);
+////         Set the adapter onto the view pager
+//        HomeFragmentPagerAdapter adapter = new HomeFragmentPagerAdapter(this, getSupportFragmentManager());
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeTabFragment())
+        .commit();
+//        viewPager.setAdapter(adapter);
+//
+//
+////         Give the TabLayout the ViewPager
+//        TabLayout tabLayout = findViewById(R.id.sliding_tabs);
+//        tabLayout.setupWithViewPager(viewPager);
     }
 
 
@@ -58,7 +53,7 @@ public class HomeActivity extends AppCompatActivity {
         LayoutInflater mInflater = LayoutInflater.from(HomeActivity.this);
         View mCustomView = mInflater.inflate(R.layout.custom_main_actionbar, null);
 
-        ImageButton profile = (ImageButton) mCustomView.findViewById(R.id.profile);
+        ImageButton profile = mCustomView.findViewById(R.id.profile);
         mActionBar.setCustomView(mCustomView);
         profile.setOnClickListener(new View.OnClickListener() {
             @Override

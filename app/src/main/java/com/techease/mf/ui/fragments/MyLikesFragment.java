@@ -52,7 +52,6 @@ public class MyLikesFragment extends Fragment {
     String email, user_id;
     ArrayList<MyLikesModel> myLikes_model_list;
     MyLikesAdapter myLikes_adapter;
-
     Unbinder unbinder;
 
     @BindView(R.id.rv_myLikes)
@@ -72,26 +71,10 @@ public class MyLikesFragment extends Fragment {
         user_id = sharedPreferences.getString("user_id", "");
 
 
-        if (InternetUtils.isNetworkConnected(getActivity())) {
-
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                myLikes_model_list = new ArrayList<>();
-                apicall();
-                if (alertDialog == null)
-                    alertDialog = AlertsUtils.createProgressDialog(getActivity());
-                alertDialog.show();
-                myLikes_adapter = new MyLikesAdapter(getActivity(), myLikes_model_list);
-                recyclerView.setAdapter(myLikes_adapter);
-            }
-
-        else {
-            Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-        }
-
 
         return v;
     }
-
+//ao zma pa khyal, kho pa my likes bande hm bel ta rawan de
 
     private void apicall() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://menfashion.techeasesol.com/restapi/userFavorites"
@@ -136,6 +119,7 @@ public class MyLikesFragment extends Fragment {
                             alertDialog.dismiss();
                         startActivity(new Intent(getActivity(), Profile.class));
 
+
                         JSONObject jsonObject = new JSONObject(response);
                         String message = jsonObject.getString("message");
                         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
@@ -176,5 +160,24 @@ public class MyLikesFragment extends Fragment {
         mRequestQueue.add(stringRequest);
     }
 
+    @Override
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if(menuVisible)
+        if (InternetUtils.isNetworkConnected(getActivity())) {
 
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            myLikes_model_list = new ArrayList<>();
+            apicall();
+            if (alertDialog == null)
+                alertDialog = AlertsUtils.createProgressDialog(getActivity());
+            alertDialog.show();
+            myLikes_adapter = new MyLikesAdapter(getActivity(), myLikes_model_list);
+            recyclerView.setAdapter(myLikes_adapter);
+        }
+
+        else {
+            Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

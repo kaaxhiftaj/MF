@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.techease.mf.R;
-import com.techease.mf.ui.adapters.HomeFragmentPagerAdapter;
+import com.techease.mf.ui.adapters.MainTabsAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,19 +28,21 @@ public class HomeTabFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home_tab, container, false);
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
-        // Create an adapter that knows which fragment should be shown on each page
-        HomeFragmentPagerAdapter adapter = new HomeFragmentPagerAdapter(getActivity(), getActivity().getSupportFragmentManager());
-
-        // Set the adapter onto the view pager
+        ViewPager viewPager = view.findViewById(R.id.viewpager);
+//         Set the adapter onto the view pager
+        MainTabsAdapter adapter = new MainTabsAdapter(getActivity().getSupportFragmentManager());
+        //getFragmentManager().beginTransaction().replace(R.id.container, new HomeTabFragment());
+        viewPager.setOffscreenPageLimit(0);
         viewPager.setAdapter(adapter);
 
 
-        // Give the TabLayout the ViewPager
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.sliding_tabs);
+//         Give the TabLayout the ViewPager
+        TabLayout tabLayout = view.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
-        TabLayout.Tab tab = tabLayout.getTabAt(0);
+
+        // Create an adapter that knows which fragment should be shown on each page
+
         
         return view;
     }
