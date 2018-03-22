@@ -33,7 +33,7 @@ public class HomeTabFragment extends Fragment {
 //         Set the adapter onto the view pager
         MainTabsAdapter adapter = new MainTabsAdapter(getActivity().getSupportFragmentManager());
         //getFragmentManager().beginTransaction().replace(R.id.container, new HomeTabFragment());
-        viewPager.setOffscreenPageLimit(0);
+        viewPager.setOffscreenPageLimit(2);
         viewPager.setAdapter(adapter);
 
 

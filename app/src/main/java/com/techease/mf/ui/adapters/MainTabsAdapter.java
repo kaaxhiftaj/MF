@@ -14,6 +14,8 @@ import com.techease.mf.ui.fragments.TrendFragment;
 
 public class MainTabsAdapter extends FragmentPagerAdapter {
 
+    Fragment newFragment,trendFragment,mylikesFragment;
+
     public MainTabsAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -22,12 +24,18 @@ public class MainTabsAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new NewFragment();
+                if(newFragment==null)
+                    newFragment = new NewFragment();
+                return newFragment;
             case 1:
-                return new TrendFragment();
+                if(trendFragment==null)
+                    trendFragment = new TrendFragment();
+                return trendFragment;
             case 2:
             default:
-                return new MyLikesFragment();
+                if(mylikesFragment==null)
+                    mylikesFragment =new MyLikesFragment();
+                return mylikesFragment;
         }
     }
 

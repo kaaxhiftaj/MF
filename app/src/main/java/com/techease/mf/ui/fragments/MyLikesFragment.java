@@ -53,6 +53,7 @@ public class MyLikesFragment extends Fragment {
     ArrayList<MyLikesModel> myLikes_model_list;
     MyLikesAdapter myLikes_adapter;
     Unbinder unbinder;
+    boolean _areLecturesLoaded = false;
 
     @BindView(R.id.rv_myLikes)
     RecyclerView recyclerView;
@@ -160,12 +161,22 @@ public class MyLikesFragment extends Fragment {
         mRequestQueue.add(stringRequest);
     }
 
-    @Override
-    public void setMenuVisibility(boolean menuVisible) {
-        super.setMenuVisibility(menuVisible);
-        if(menuVisible)
-        if (InternetUtils.isNetworkConnected(getActivity())) {
+//    @Override
+//    public void setMenuVisibility(boolean menuVisible) {
+//        super.setMenuVisibility(menuVisible);
+//        if(menuVisible)
+//            if (InternetUtils.isNetworkConnected(getActivity())) {
+//
+//        }
+//        else {
+//            Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && !_areLecturesLoaded ) {//se kar
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             myLikes_model_list = new ArrayList<>();
             apicall();
@@ -174,10 +185,7 @@ public class MyLikesFragment extends Fragment {
             alertDialog.show();
             myLikes_adapter = new MyLikesAdapter(getActivity(), myLikes_model_list);
             recyclerView.setAdapter(myLikes_adapter);
-        }
-
-        else {
-            Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+            _areLecturesLoaded = true;
         }
     }
 }
