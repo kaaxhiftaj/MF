@@ -161,22 +161,10 @@ public class MyLikesFragment extends Fragment {
         mRequestQueue.add(stringRequest);
     }
 
-//    @Override
-//    public void setMenuVisibility(boolean menuVisible) {
-//        super.setMenuVisibility(menuVisible);
-//        if(menuVisible)
-//            if (InternetUtils.isNetworkConnected(getActivity())) {
-//
-//        }
-//        else {
-//            Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-//        }
-//    }
-
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && !_areLecturesLoaded ) {//se kar
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if (menuVisible && !_areLecturesLoaded){
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             myLikes_model_list = new ArrayList<>();
             apicall();
@@ -187,5 +175,36 @@ public class MyLikesFragment extends Fragment {
             recyclerView.setAdapter(myLikes_adapter);
             _areLecturesLoaded = true;
         }
+
+    }
+
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        super.setUserVisibleHint(isVisibleToUser);
+//        if (isVisibleToUser && !_areLecturesLoaded ) {//se kar
+//            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//            myLikes_model_list = new ArrayList<>();
+//            apicall();
+//            if (alertDialog == null)
+//                alertDialog = AlertsUtils.createProgressDialog(getActivity());
+//            alertDialog.show();
+//            myLikes_adapter = new MyLikesAdapter(getActivity(), myLikes_model_list);
+//            recyclerView.setAdapter(myLikes_adapter);
+//            _areLecturesLoaded = true;
+//        }else{
+//
+////            myLikes_model_list.clear();
+//        }
+//    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
     }
 }
