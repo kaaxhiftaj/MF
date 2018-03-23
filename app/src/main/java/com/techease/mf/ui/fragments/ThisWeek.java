@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +21,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.techease.mf.LikeListener;
 import com.techease.mf.R;
 import com.techease.mf.ui.adapters.AllTimeAdapter;
+import com.techease.mf.ui.adapters.MyLikesAdapter;
 import com.techease.mf.ui.models.AllTimeModel;
 import com.techease.mf.utils.AlertsUtils;
 import com.techease.mf.utils.Configuration;
@@ -40,7 +43,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class ThisWeek extends Fragment {
+public class ThisWeek extends Fragment implements LikeListener {
 
 
     android.support.v7.app.AlertDialog alertDialog;
@@ -52,6 +55,7 @@ public class ThisWeek extends Fragment {
     Unbinder unbinder;
     @BindView(R.id.rv_thisweek)
     RecyclerView recyclerView;
+    boolean _areLecturesLoaded = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -167,6 +171,30 @@ public class ThisWeek extends Fragment {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         mRequestQueue.add(stringRequest);
     }
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        super.setUserVisibleHint(isVisibleToUser);
+//        if (isVisibleToUser && !_areLecturesLoaded ) {
+//            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//            all_model_list = new ArrayList<>();
+//            apicall();
+//            if (alertDialog == null)
+//                alertDialog = AlertsUtils.createProgressDialog(getActivity());
+//            alertDialog.show();
+//            all_adapter = new AllTimeAdapter(getActivity(), all_model_list);
+//            recyclerView.setAdapter(all_adapter);
+//            _areLecturesLoaded = true;
+//        }
+//    }
+    public void TrendsLikes(){
+        Log.d("asd","asd");
+        all_model_list.clear();
+        apicall();
+    }
 
 
+    @Override
+    public void onLikePressed() {
+        Log.d("hello","hi");
+    }
 }

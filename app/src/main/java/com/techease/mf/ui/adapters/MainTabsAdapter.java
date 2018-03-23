@@ -15,7 +15,7 @@ import com.techease.mf.ui.fragments.TrendFragment;
 public class MainTabsAdapter extends FragmentPagerAdapter {
 
     Fragment newFragment,trendFragment,mylikesFragment;
-
+//da paron ta kre ow
     public MainTabsAdapter(FragmentManager fm) {
         super(fm);
     }

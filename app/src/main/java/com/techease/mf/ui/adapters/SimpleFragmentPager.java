@@ -17,6 +17,7 @@ import com.techease.mf.ui.fragments.ThisWeek;
 public class SimpleFragmentPager extends FragmentPagerAdapter {
 
     private Context mContext;
+    Fragment thisWeekFragment, thisMonthFragment, allTimeFragment;
 
     public SimpleFragmentPager(Context context, FragmentManager fm) {
         super(fm);
@@ -28,14 +29,20 @@ public class SimpleFragmentPager extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new ThisWeek();
+                if (thisWeekFragment == null)
+                    thisWeekFragment = new ThisWeek();
+                return thisWeekFragment;
 
             case 1:
-                return new ThisMonth();
+                if (thisMonthFragment == null)
+                    thisMonthFragment = new ThisMonth();
+                return thisMonthFragment;
 
             case 2:
             default:
-                return new AllTime();
+                if (allTimeFragment == null)
+                    allTimeFragment = new AllTime();
+                return allTimeFragment;
         }
 
     }

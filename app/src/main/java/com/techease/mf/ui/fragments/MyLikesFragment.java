@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.techease.mf.LikeListener;
 import com.techease.mf.R;
 import com.techease.mf.ui.activities.Profile;
 import com.techease.mf.ui.adapters.MyLikesAdapter;
@@ -44,7 +46,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class MyLikesFragment extends Fragment {
+public class MyLikesFragment extends Fragment implements LikeListener {
 
     android.support.v7.app.AlertDialog alertDialog;
     SharedPreferences sharedPreferences;
@@ -161,18 +163,6 @@ public class MyLikesFragment extends Fragment {
         mRequestQueue.add(stringRequest);
     }
 
-//    @Override
-//    public void setMenuVisibility(boolean menuVisible) {
-//        super.setMenuVisibility(menuVisible);
-//        if(menuVisible)
-//            if (InternetUtils.isNetworkConnected(getActivity())) {
-//
-//        }
-//        else {
-//            Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-//        }
-//    }
-
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
@@ -187,5 +177,15 @@ public class MyLikesFragment extends Fragment {
             recyclerView.setAdapter(myLikes_adapter);
             _areLecturesLoaded = true;
         }
+    }
+
+    @Override
+    public void onLikePressed() {
+        Log.d("hello","hi");
+    }
+    public void updatelikes(){
+        Log.d("asd","asd");
+        myLikes_model_list.clear();
+        apicall();
     }
 }

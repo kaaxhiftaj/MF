@@ -23,7 +23,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.techease.mf.LikeListener;
 import com.techease.mf.R;
+import com.techease.mf.ui.fragments.MyLikesFragment;
 import com.techease.mf.ui.fragments.ProductsFragment;
 import com.techease.mf.ui.models.NewModel;
 import com.techease.mf.utils.Configuration;
@@ -92,6 +94,19 @@ public class NewAdapter extends RecyclerView.Adapter<NewAdapter.MyViewHolder> {
                     holder.likeLayout.setBackgroundColor(Color.parseColor("#000000"));
                     holder.share.setBackgroundColor(Color.parseColor("#000000"));
                     apicall();
+                    LikeListener lik = (LikeListener) context;
+                    lik.onLikePressed();
+
+
+
+
+
+
+
+
+
+
+
                 }else {
                     Toast.makeText(context, "Please Login First", Toast.LENGTH_SHORT).show();
                 }
