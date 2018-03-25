@@ -2,7 +2,6 @@ package com.techease.mf.ui.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -56,7 +55,7 @@ public class ThisMonth extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.fragment_this_month, container, false);
+        View v = inflater.inflate(R.layout.fragment_this_month, container, false);
         unbinder = ButterKnife.bind(this, v);
 
         sharedPreferences = getActivity().getSharedPreferences(Configuration.MY_PREF, Context.MODE_PRIVATE);
@@ -84,6 +83,12 @@ public class ThisMonth extends Fragment {
         return v;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        all_model_list.clear();
+        apicall();
+    }
 
     private void apicall() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://menfashion.techeasesol.com/restapi/collectionByMonth"
@@ -131,7 +136,7 @@ public class ThisMonth extends Fragment {
                             alertDialog.dismiss();
                         JSONObject jsonObject = new JSONObject(response);
                         String message = jsonObject.getString("message");
-                    //    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                        //    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
 
                     } catch (JSONException e) {
                         e.printStackTrace();

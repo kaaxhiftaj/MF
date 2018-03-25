@@ -86,8 +86,12 @@ public class AllTime extends Fragment {
         return v;
     }
 
-
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        all_model_list.clear();
+        apicall();
+    }
 
     private void apicall() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://menfashion.techeasesol.com/restapi/collectionTrending"
