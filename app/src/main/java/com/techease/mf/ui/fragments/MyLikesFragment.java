@@ -3,7 +3,6 @@ package com.techease.mf.ui.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,12 +23,9 @@ import com.android.volley.toolbox.Volley;
 import com.techease.mf.R;
 import com.techease.mf.ui.activities.Profile;
 import com.techease.mf.ui.adapters.MyLikesAdapter;
-import com.techease.mf.ui.adapters.NewAdapter;
 import com.techease.mf.ui.models.MyLikesModel;
-import com.techease.mf.ui.models.NewModel;
 import com.techease.mf.utils.AlertsUtils;
 import com.techease.mf.utils.Configuration;
-import com.techease.mf.utils.InternetUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,7 +58,7 @@ public class MyLikesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.fragment_my_likes, container, false);
+        View v = inflater.inflate(R.layout.fragment_my_likes, container, false);
 
         unbinder = ButterKnife.bind(this, v);
 
@@ -70,7 +66,6 @@ public class MyLikesFragment extends Fragment {
         editor = sharedPreferences.edit();
         email = sharedPreferences.getString("email", "");
         user_id = sharedPreferences.getString("user_id", "");
-
 
 
         return v;
@@ -161,10 +156,11 @@ public class MyLikesFragment extends Fragment {
         mRequestQueue.add(stringRequest);
     }
 
+
     @Override
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
-        if (menuVisible && !_areLecturesLoaded){
+        if (menuVisible && !_areLecturesLoaded) {
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             myLikes_model_list = new ArrayList<>();
             apicall();
@@ -200,6 +196,8 @@ public class MyLikesFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        myLikes_model_list.clear();
+        apicall();
     }
 
     @Override
