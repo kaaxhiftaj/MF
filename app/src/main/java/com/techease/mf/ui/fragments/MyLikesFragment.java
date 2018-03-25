@@ -46,7 +46,7 @@ public class MyLikesFragment extends Fragment {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     String email, user_id;
-    ArrayList<MyLikesModel> myLikes_model_list;
+    ArrayList<MyLikesModel> myLikes_model_list = new ArrayList<>();
     MyLikesAdapter myLikes_adapter;
     Unbinder unbinder;
     boolean _areLecturesLoaded = false;
@@ -66,8 +66,9 @@ public class MyLikesFragment extends Fragment {
         editor = sharedPreferences.edit();
         email = sharedPreferences.getString("email", "");
         user_id = sharedPreferences.getString("user_id", "");
-
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        myLikes_adapter = new MyLikesAdapter(getActivity(), myLikes_model_list);
+        recyclerView.setAdapter(myLikes_adapter);
         return v;
     }
 //ao zma pa khyal, kho pa my likes bande hm bel ta rawan de
@@ -155,103 +156,17 @@ public class MyLikesFragment extends Fragment {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         mRequestQueue.add(stringRequest);
     }
-    private void apicall1() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://menfashion.techeasesol.com/restapi/userFavorites"
-                , new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if (response.contains("true")) {
-                    try {
-                        if (alertDialog != null)
-                            alertDialog.dismiss();
-                        JSONObject jsonObject = new JSONObject(response);
-                        JSONArray jsonArr = jsonObject.getJSONArray("collection");
-                        for (int i = 0; i < jsonArr.length(); i++) {
-                            JSONObject temp = jsonArr.getJSONObject(i);
-
-                            MyLikesModel model = new MyLikesModel();
-                            String id = temp.getString("id");
-                            String name = temp.getString("name");
-                            String image = temp.getString("image");
-                            String like = temp.getString("likes");
-                            String facebook = temp.getString("facebook");
-                            model.setId(id);
-                            model.setName(name);
-                            model.setImage(image);
-                            model.setNoLikes(like);
-                            model.setFacebook(facebook);
-                            myLikes_model_list.add(model);
-
-
-                        }
-                        myLikes_adapter.notifyDataSetChanged();
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        if (alertDialog != null)
-                            alertDialog.dismiss();
-                    }
-                } else {
-
-                    try {
-                        if (alertDialog != null)
-                            alertDialog.dismiss();
-//                        startActivity(new Intent(getActivity(), Profile.class));
-
-
-                        JSONObject jsonObject = new JSONObject(response);
-                        String message = jsonObject.getString("message");
-//                        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        if (alertDialog != null)
-                            alertDialog.dismiss();
-                    }
-                }
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if (alertDialog != null)
-                    alertDialog.dismiss();
-
-            }
-        }) {
-            @Override
-            public String getBodyContentType() {
-                return "application/x-www-form-urlencoded;charset=UTF-8";
-            }
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("user_id", user_id);
-                return params;
-            }
-
-        };
-        RequestQueue mRequestQueue = Volley.newRequestQueue(getActivity());
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(20000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        mRequestQueue.add(stringRequest);
-    }
 
 
     @Override
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
         if (menuVisible && !_areLecturesLoaded) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            myLikes_model_list = new ArrayList<>();
             apicall();
             if (alertDialog == null)
                 alertDialog = AlertsUtils.createProgressDialog(getActivity());
             alertDialog.show();
-            myLikes_adapter = new MyLikesAdapter(getActivity(), myLikes_model_list);
-            recyclerView.setAdapter(myLikes_adapter);
+
         }
 
     }

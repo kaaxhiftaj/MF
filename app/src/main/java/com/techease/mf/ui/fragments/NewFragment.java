@@ -49,7 +49,7 @@ public class NewFragment extends Fragment {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     String email, user_id;
-    ArrayList<NewModel> new_model_list;
+    ArrayList<NewModel> new_model_list = new ArrayList<>();
     NewAdapter new_adapter;
 
     Unbinder unbinder;
@@ -66,20 +66,18 @@ public class NewFragment extends Fragment {
 
         sharedPreferences = getActivity().getSharedPreferences(Configuration.MY_PREF, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
+        editor.putString("user_id", "4").commit();
         email = sharedPreferences.getString("email", "");
         user_id = sharedPreferences.getString("user_id", "");
-
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        new_adapter = new NewAdapter(getActivity(), new_model_list);
+        recyclerView.setAdapter(new_adapter);
         if (InternetUtils.isNetworkConnected(getActivity())) {
-
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            new_model_list = new ArrayList<>();
             apicall();
             if (alertDialog == null)
                 alertDialog = AlertsUtils.createProgressDialog(getActivity());
             alertDialog.show();
-            new_adapter = new NewAdapter(getActivity(), new_model_list);
-            recyclerView.setAdapter(new_adapter);
+
 
         } else {
             Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_SHORT).show();

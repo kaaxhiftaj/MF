@@ -67,13 +67,13 @@ public class ThisMonth extends Fragment {
         if (InternetUtils.isNetworkConnected(getActivity())) {
 
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            all_model_list = new ArrayList<>();
-            apicall();
-            if (alertDialog == null)
-                alertDialog = AlertsUtils.createProgressDialog(getActivity());
-            alertDialog.show();
             all_adapter = new AllTimeAdapter(getActivity(), all_model_list);
             recyclerView.setAdapter(all_adapter);
+            apicall();
+            if (alertDialog == null) {
+                alertDialog = AlertsUtils.createProgressDialog(getActivity());
+            }
+            alertDialog.show();
 
         } else {
             Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_SHORT).show();
