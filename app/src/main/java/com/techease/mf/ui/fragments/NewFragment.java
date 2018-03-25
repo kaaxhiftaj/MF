@@ -66,7 +66,6 @@ public class NewFragment extends Fragment {
 
         sharedPreferences = getActivity().getSharedPreferences(Configuration.MY_PREF, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        editor.putString("user_id", "4").commit();
         email = sharedPreferences.getString("email", "");
         user_id = sharedPreferences.getString("user_id", "");
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
