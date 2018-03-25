@@ -56,7 +56,6 @@ public class NewAdapter extends RecyclerView.Adapter<NewAdapter.MyViewHolder> {
 
         sharedPreferences = context.getSharedPreferences(Configuration.MY_PREF, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        editor.putString("user_id", "4").commit();
         user_id = sharedPreferences.getString("user_id", "");
 
 
