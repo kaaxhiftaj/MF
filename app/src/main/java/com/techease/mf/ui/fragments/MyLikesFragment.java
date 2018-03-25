@@ -252,7 +252,6 @@ public class MyLikesFragment extends Fragment {
             alertDialog.show();
             myLikes_adapter = new MyLikesAdapter(getActivity(), myLikes_model_list);
             recyclerView.setAdapter(myLikes_adapter);
-            _areLecturesLoaded = true;
         }
 
     }
@@ -276,16 +275,6 @@ public class MyLikesFragment extends Fragment {
 //        }
 //    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        myLikes_model_list = new ArrayList<>();
-        myLikes_model_list.clear();
-        apicall1();
-        myLikes_adapter = new MyLikesAdapter(getActivity(), myLikes_model_list);
-        recyclerView.setAdapter(myLikes_adapter);
-    }
 
     @Override
     public void onStop() {

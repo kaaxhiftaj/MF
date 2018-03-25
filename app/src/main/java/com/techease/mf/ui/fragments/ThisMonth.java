@@ -45,7 +45,7 @@ public class ThisMonth extends Fragment {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     String email, user_id;
-    ArrayList<AllTimeModel> all_model_list;
+    ArrayList<AllTimeModel> all_model_list = new ArrayList<>();
     AllTimeAdapter all_adapter;
     Unbinder unbinder;
     @BindView(R.id.rv_thismonth)
@@ -83,12 +83,6 @@ public class ThisMonth extends Fragment {
         return v;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        all_model_list.clear();
-        apicall();
-    }
 
     private void apicall() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://menfashion.techeasesol.com/restapi/collectionByMonth"
