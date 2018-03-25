@@ -23,11 +23,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.facebook.all.All;
 import com.techease.mf.R;
 import com.techease.mf.ui.fragments.ProductsFragment;
 import com.techease.mf.ui.models.AllTimeModel;
-import com.techease.mf.ui.models.MyLikesModel;
 import com.techease.mf.utils.Configuration;
 
 import java.util.ArrayList;
@@ -45,11 +43,11 @@ public class AllTimeAdapter extends RecyclerView.Adapter<AllTimeAdapter.MyViewHo
     String collection_id;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
-    String user_id ;
+    String user_id;
 
     public AllTimeAdapter(Context context, ArrayList<AllTimeModel> allLikesModels) {
-        this.context=context;
-        this.allArrayList = allLikesModels ;
+        this.context = context;
+        this.allArrayList = allLikesModels;
     }
 
     @Override
@@ -65,20 +63,20 @@ public class AllTimeAdapter extends RecyclerView.Adapter<AllTimeAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        final AllTimeModel model= allArrayList.get(position);
+        final AllTimeModel model = allArrayList.get(position);
 
-        holder.noLikes.setText(model.getNoLikes()+ " Likes");
+        holder.noLikes.setText(model.getNoLikes() + " Likes");
         Glide.with(context).load(model.getImage()).into(holder.item_image);
 
-        if (model.getLiked().equals("true")){
+        if (model.getLiked().equals("true")) {
 
-         //   holder.like.setImageResource(R.drawable.like);
+            //   holder.like.setImageResource(R.drawable.like);
             holder.like.setBackgroundColor(Color.parseColor("#000000"));
             holder.likeLayout.setBackgroundColor(Color.parseColor("#000000"));
             holder.share.setBackgroundColor(Color.parseColor("#000000"));
 
-        }else {
-        //    holder.like.setImageResource(R.drawable.unlike);
+        } else {
+            //    holder.like.setImageResource(R.drawable.unlike);
             holder.like.setBackgroundColor(Color.parseColor("#535c68"));
             holder.likeLayout.setBackgroundColor(Color.parseColor("#535c68"));
             holder.share.setBackgroundColor(Color.parseColor("#535c68"));
@@ -94,7 +92,8 @@ public class AllTimeAdapter extends RecyclerView.Adapter<AllTimeAdapter.MyViewHo
                     holder.likeLayout.setBackgroundColor(Color.parseColor("#000000"));
                     holder.share.setBackgroundColor(Color.parseColor("#000000"));
                     apicall();
-                }else {
+                    model.setLiked("true");
+                } else {
                     Toast.makeText(context, "Please Login First", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -105,7 +104,7 @@ public class AllTimeAdapter extends RecyclerView.Adapter<AllTimeAdapter.MyViewHo
             public void onClick(View v) {
 
                 String collection_id = model.getId();
-                Intent i = new Intent(context ,ProductsFragment.class);
+                Intent i = new Intent(context, ProductsFragment.class);
                 i.putExtra("collection_id", collection_id);
                 context.startActivity(i);
 
@@ -136,18 +135,18 @@ public class AllTimeAdapter extends RecyclerView.Adapter<AllTimeAdapter.MyViewHo
 
 
         TextView noLikes;
-        ImageView item_image ;
+        ImageView item_image;
         ImageButton share, like;
         LinearLayout likeLayout;
 
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            noLikes =(TextView)itemView.findViewById(R.id.noLikes);
-            share=(ImageButton) itemView.findViewById(R.id.share);
+            noLikes = (TextView) itemView.findViewById(R.id.noLikes);
+            share = (ImageButton) itemView.findViewById(R.id.share);
             like = (ImageButton) itemView.findViewById(R.id.like);
             item_image = (ImageView) itemView.findViewById(R.id.item_image);
-            likeLayout = (LinearLayout)itemView.findViewById(R.id.likeLayout);
+            likeLayout = (LinearLayout) itemView.findViewById(R.id.likeLayout);
 
         }
 
