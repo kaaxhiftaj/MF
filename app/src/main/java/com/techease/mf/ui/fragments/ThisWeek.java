@@ -51,6 +51,8 @@ public class ThisWeek extends Fragment {
     Unbinder unbinder;
     @BindView(R.id.rv_thisweek)
     RecyclerView recyclerView;
+    private boolean _hasLoadedOnce = false;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,7 +78,6 @@ public class ThisWeek extends Fragment {
             alertDialog.show();
 
 
-
         } else {
             Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_SHORT).show();
         }
@@ -86,6 +87,21 @@ public class ThisWeek extends Fragment {
     }
 
 
+    @Override
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if (this.isVisible()) {
+            if (menuVisible && !_hasLoadedOnce) {
+                all_model_list.clear();
+                all_adapter.notifyDataSetChanged();
+                if (alertDialog == null)
+                    alertDialog = AlertsUtils.createProgressDialog(getActivity());
+                alertDialog.show();
+                apicall();
+                _hasLoadedOnce = true;
+            }
+        }
+    }
 
     private void apicall() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://menfashion.techeasesol.com/restapi/collectionByWeek"

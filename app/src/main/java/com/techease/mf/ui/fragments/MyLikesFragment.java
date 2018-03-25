@@ -162,6 +162,8 @@ public class MyLikesFragment extends Fragment {
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
         if (menuVisible && !_areLecturesLoaded) {
+            myLikes_model_list.clear();
+            myLikes_adapter.notifyDataSetChanged();
             apicall();
             if (alertDialog == null)
                 alertDialog = AlertsUtils.createProgressDialog(getActivity());

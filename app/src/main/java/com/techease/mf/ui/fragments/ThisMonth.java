@@ -50,6 +50,7 @@ public class ThisMonth extends Fragment {
     Unbinder unbinder;
     @BindView(R.id.rv_thismonth)
     RecyclerView recyclerView;
+    private boolean _hasLoadedOnce = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -168,5 +169,20 @@ public class ThisMonth extends Fragment {
         mRequestQueue.add(stringRequest);
     }
 
+    @Override
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if (this.isVisible()) {
+            if (menuVisible && !_hasLoadedOnce) {
+                all_model_list.clear();
+                all_adapter.notifyDataSetChanged();
+                if (alertDialog == null)
+                    alertDialog = AlertsUtils.createProgressDialog(getActivity());
+                alertDialog.show();
+                apicall();
+                _hasLoadedOnce = true;
+            }
+        }
+    }
 
 }

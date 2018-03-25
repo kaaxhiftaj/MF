@@ -51,7 +51,7 @@ public class NewFragment extends Fragment {
     String email, user_id;
     ArrayList<NewModel> new_model_list = new ArrayList<>();
     NewAdapter new_adapter;
-
+    private boolean _hasLoadedOnce = false;
     Unbinder unbinder;
 
     @BindView(R.id.rv_new)
@@ -89,6 +89,7 @@ public class NewFragment extends Fragment {
     public void onResume() {
         super.onResume();
         new_model_list.clear();
+        new_adapter.notifyDataSetChanged();
         apicall();
         if (alertDialog == null) {
             alertDialog = AlertsUtils.createProgressDialog(getActivity());
@@ -96,6 +97,21 @@ public class NewFragment extends Fragment {
         alertDialog.show();
         new_adapter.notifyDataSetChanged();
 
+    }
+
+    @Override
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if (this.isVisible()) {
+            if (menuVisible) {
+                new_model_list.clear();
+                new_adapter.notifyDataSetChanged();
+                if (alertDialog == null)
+                    alertDialog = AlertsUtils.createProgressDialog(getActivity());
+                alertDialog.show();
+                apicall();
+            }
+        }
     }
 
     private void apicall() {
