@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,6 +122,7 @@ public class NewFragment extends Fragment {
             public void onResponse(String response) {
                 if (response.contains("true")) {
                     try {
+                        Log.d("zma new response", response);
                         if (alertDialog != null)
                             alertDialog.dismiss();
                         JSONObject jsonObject = new JSONObject(response);
