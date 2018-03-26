@@ -118,10 +118,7 @@ public class NewAdapter extends RecyclerView.Adapter<NewAdapter.MyViewHolder> {
                                     }
                                 } catch (JSONException e) {
 
-
                                 }
-
-                                Toast.makeText(context, "Liked", Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -227,8 +224,6 @@ public class NewAdapter extends RecyclerView.Adapter<NewAdapter.MyViewHolder> {
 
 
                     }
-
-                    Toast.makeText(context, "Liked", Toast.LENGTH_SHORT).show();
                 }
             }
 

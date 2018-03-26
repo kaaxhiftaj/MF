@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,9 @@ import com.techease.mf.R;
 import com.techease.mf.ui.fragments.ProductsFragment;
 import com.techease.mf.ui.models.AllTimeModel;
 import com.techease.mf.utils.Configuration;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,8 +95,60 @@ public class AllTimeAdapter extends RecyclerView.Adapter<AllTimeAdapter.MyViewHo
                     holder.like.setBackgroundColor(Color.parseColor("#000000"));
                     holder.likeLayout.setBackgroundColor(Color.parseColor("#000000"));
                     holder.share.setBackgroundColor(Color.parseColor("#000000"));
-                    apicall();
-                    model.setLiked("true");
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://menfashion.techeasesol.com/restapi/userliked"
+                            , new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            if (response.contains("true")) {
+                                Log.d("zma liked res", response);
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    if (jsonObject.getInt("status") == 200){
+                                        holder.like.setBackgroundColor(Color.parseColor("#000000"));
+                                        holder.likeLayout.setBackgroundColor(Color.parseColor("#000000"));
+                                        holder.share.setBackgroundColor(Color.parseColor("#000000"));
+                                        model.setLiked("true");
+                                    }else if (jsonObject.getInt("status") == 201) {
+                                        holder.like.setBackgroundColor(Color.parseColor("#535c68"));
+                                        holder.likeLayout.setBackgroundColor(Color.parseColor("#535c68"));
+                                        holder.share.setBackgroundColor(Color.parseColor("#535c68"));
+                                        model.setLiked("false");
+                                    }
+                                } catch (JSONException e) {
+
+
+                                }
+
+                                Toast.makeText(context, "Liked", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+
+                        }
+                    }) {
+                        @Override
+                        public String getBodyContentType() {
+                            return "application/x-www-form-urlencoded;charset=UTF-8";
+                        }
+
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<>();
+                            params.put("user_id", user_id);
+                            params.put("collection_id", collection_id);
+                            return params;
+                        }
+
+                    };
+                    RequestQueue mRequestQueue = Volley.newRequestQueue(context);
+                    stringRequest.setRetryPolicy(new DefaultRetryPolicy(20000,
+                            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                    mRequestQueue.add(stringRequest);
                 } else {
                     Toast.makeText(context, "Please Login First", Toast.LENGTH_SHORT).show();
                 }

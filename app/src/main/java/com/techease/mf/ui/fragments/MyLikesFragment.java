@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -50,6 +52,8 @@ public class MyLikesFragment extends Fragment {
     MyLikesAdapter myLikes_adapter;
     Unbinder unbinder;
     boolean _areLecturesLoaded = false;
+    @BindView(R.id.tv_empty_list)
+    TextView tvEmptyList;
 
     @BindView(R.id.rv_myLikes)
     RecyclerView recyclerView;
@@ -69,24 +73,31 @@ public class MyLikesFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         myLikes_adapter = new MyLikesAdapter(getActivity(), myLikes_model_list);
         recyclerView.setAdapter(myLikes_adapter);
+
         return v;
     }
 //ao zma pa khyal, kho pa my likes bande hm bel ta rawan de
 
     private void apicall() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://menfashion.techeasesol.com/restapi/userFavorites"
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "http://menfashion.techeasesol.com/restapi/userFavorites"
                 , new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if (response.contains("true")) {
                     try {
+                        tvEmptyList.setVisibility(View.GONE);
+                        Log.d("zma my likes respo", response);
                         if (alertDialog != null)
                             alertDialog.dismiss();
                         JSONObject jsonObject = new JSONObject(response);
+                        if (jsonObject.getString("message").equals("No Favorites")) {
+                            tvEmptyList.setVisibility(View.VISIBLE);
+                        }
                         JSONArray jsonArr = jsonObject.getJSONArray("collection");
+
                         for (int i = 0; i < jsonArr.length(); i++) {
                             JSONObject temp = jsonArr.getJSONObject(i);
-
                             MyLikesModel model = new MyLikesModel();
                             String id = temp.getString("id");
                             String name = temp.getString("name");
@@ -99,8 +110,6 @@ public class MyLikesFragment extends Fragment {
                             model.setNoLikes(like);
                             model.setFacebook(facebook);
                             myLikes_model_list.add(model);
-
-
                         }
                         myLikes_adapter.notifyDataSetChanged();
 
@@ -110,16 +119,15 @@ public class MyLikesFragment extends Fragment {
                             alertDialog.dismiss();
                     }
                 } else {
-
+                    startActivity(new Intent(getActivity(), Profile.class));
                     try {
-                        if (alertDialog != null)
+                        if (alertDialog != null) {
                             alertDialog.dismiss();
-                        startActivity(new Intent(getActivity(), Profile.class));
 
-
-                        JSONObject jsonObject = new JSONObject(response);
-                        String message = jsonObject.getString("message");
-                        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                            JSONObject jsonObject = new JSONObject(response);
+                            String message = jsonObject.getString("message");
+                            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                        }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -168,34 +176,11 @@ public class MyLikesFragment extends Fragment {
             if (alertDialog == null)
                 alertDialog = AlertsUtils.createProgressDialog(getActivity());
             alertDialog.show();
-
         }
-
     }
-
-//    @Override
-//    public void setUserVisibleHint(boolean isVisibleToUser) {
-//        super.setUserVisibleHint(isVisibleToUser);
-//        if (isVisibleToUser && !_areLecturesLoaded ) {//se kar
-//            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//            myLikes_model_list = new ArrayList<>();
-//            apicall();
-//            if (alertDialog == null)
-//                alertDialog = AlertsUtils.createProgressDialog(getActivity());
-//            alertDialog.show();
-//            myLikes_adapter = new MyLikesAdapter(getActivity(), myLikes_model_list);
-//            recyclerView.setAdapter(myLikes_adapter);
-//            _areLecturesLoaded = true;
-//        }else{
-//
-////            myLikes_model_list.clear();
-//        }
-//    }
-
 
     @Override
     public void onStop() {
         super.onStop();
-
     }
 }
