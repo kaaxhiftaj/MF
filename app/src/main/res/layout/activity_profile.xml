@@ -34,9 +34,10 @@
         />
 
     <TextView
-        android:layout_width="200dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:id="@+id/logoutText"
+        android:gravity="center_horizontal"
         android:textSize="10dp"
         android:text="Um alle Funktionen der Men's Fashion-App nutzen zu können, musst du dich mit Facebook einloggen."
         />

@@ -3,20 +3,16 @@ package com.techease.mf.ui.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -28,7 +24,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.techease.mf.R;
-import com.techease.mf.ui.activities.HomeActivity;
 import com.techease.mf.ui.activities.Profile;
 import com.techease.mf.ui.adapters.NewAdapter;
 import com.techease.mf.ui.models.NewModel;
@@ -54,9 +49,9 @@ public class NewFragment extends Fragment {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     String email, user_id;
-    ArrayList<NewModel> new_model_list;
+    ArrayList<NewModel> new_model_list = new ArrayList<>();
     NewAdapter new_adapter;
-
+    private boolean _hasLoadedOnce = false;
     Unbinder unbinder;
 
     @BindView(R.id.rv_new)
@@ -73,18 +68,15 @@ public class NewFragment extends Fragment {
         editor = sharedPreferences.edit();
         email = sharedPreferences.getString("email", "");
         user_id = sharedPreferences.getString("user_id", "");
-
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        new_adapter = new NewAdapter(getActivity(), new_model_list);
+        recyclerView.setAdapter(new_adapter);
         if (InternetUtils.isNetworkConnected(getActivity())) {
-
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            new_model_list = new ArrayList<>();
             apicall();
             if (alertDialog == null)
                 alertDialog = AlertsUtils.createProgressDialog(getActivity());
             alertDialog.show();
-            new_adapter = new NewAdapter(getActivity(), new_model_list);
-            recyclerView.setAdapter(new_adapter);
+
 
         } else {
             Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_SHORT).show();
@@ -93,6 +85,34 @@ public class NewFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        new_model_list.clear();
+        new_adapter.notifyDataSetChanged();
+        apicall();
+        if (alertDialog == null) {
+            alertDialog = AlertsUtils.createProgressDialog(getActivity());
+        }
+        alertDialog.show();
+        new_adapter.notifyDataSetChanged();
+
+    }
+
+    @Override
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if (this.isVisible()) {
+            if (menuVisible) {
+                new_model_list.clear();
+                new_adapter.notifyDataSetChanged();
+                if (alertDialog == null)
+                    alertDialog = AlertsUtils.createProgressDialog(getActivity());
+                alertDialog.show();
+                apicall();
+            }
+        }
+    }
 
     private void apicall() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://menfashion.techeasesol.com/restapi/collection"
@@ -186,7 +206,7 @@ public class NewFragment extends Fragment {
         LayoutInflater mInflater = LayoutInflater.from(getActivity());
         View mCustomView = mInflater.inflate(R.layout.custom_main_actionbar, null);
         ImageView ivMF = mCustomView.findViewById(R.id.iv_mf);
-        ImageButton profile = (ImageButton)mCustomView.findViewById(R.id.profile);
+        ImageButton profile = (ImageButton) mCustomView.findViewById(R.id.profile);
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);
 

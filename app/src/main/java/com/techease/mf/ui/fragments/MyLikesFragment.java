@@ -3,12 +3,10 @@ package com.techease.mf.ui.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,16 +20,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.techease.mf.LikeListener;
 import com.techease.mf.R;
 import com.techease.mf.ui.activities.Profile;
 import com.techease.mf.ui.adapters.MyLikesAdapter;
-import com.techease.mf.ui.adapters.NewAdapter;
 import com.techease.mf.ui.models.MyLikesModel;
-import com.techease.mf.ui.models.NewModel;
 import com.techease.mf.utils.AlertsUtils;
 import com.techease.mf.utils.Configuration;
-import com.techease.mf.utils.InternetUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,13 +40,13 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class MyLikesFragment extends Fragment implements LikeListener {
+public class MyLikesFragment extends Fragment {
 
     android.support.v7.app.AlertDialog alertDialog;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     String email, user_id;
-    ArrayList<MyLikesModel> myLikes_model_list;
+    ArrayList<MyLikesModel> myLikes_model_list = new ArrayList<>();
     MyLikesAdapter myLikes_adapter;
     Unbinder unbinder;
     boolean _areLecturesLoaded = false;
@@ -64,7 +58,7 @@ public class MyLikesFragment extends Fragment implements LikeListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.fragment_my_likes, container, false);
+        View v = inflater.inflate(R.layout.fragment_my_likes, container, false);
 
         unbinder = ButterKnife.bind(this, v);
 
@@ -72,9 +66,9 @@ public class MyLikesFragment extends Fragment implements LikeListener {
         editor = sharedPreferences.edit();
         email = sharedPreferences.getString("email", "");
         user_id = sharedPreferences.getString("user_id", "");
-
-
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        myLikes_adapter = new MyLikesAdapter(getActivity(), myLikes_model_list);
+        recyclerView.setAdapter(myLikes_adapter);
         return v;
     }
 //ao zma pa khyal, kho pa my likes bande hm bel ta rawan de
@@ -163,29 +157,45 @@ public class MyLikesFragment extends Fragment implements LikeListener {
         mRequestQueue.add(stringRequest);
     }
 
+
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && !_areLecturesLoaded ) {//se kar
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            myLikes_model_list = new ArrayList<>();
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if (menuVisible && !_areLecturesLoaded) {
+            myLikes_model_list.clear();
+            myLikes_adapter.notifyDataSetChanged();
             apicall();
             if (alertDialog == null)
                 alertDialog = AlertsUtils.createProgressDialog(getActivity());
             alertDialog.show();
-            myLikes_adapter = new MyLikesAdapter(getActivity(), myLikes_model_list);
-            recyclerView.setAdapter(myLikes_adapter);
-            _areLecturesLoaded = true;
+
         }
+
     }
 
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        super.setUserVisibleHint(isVisibleToUser);
+//        if (isVisibleToUser && !_areLecturesLoaded ) {//se kar
+//            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//            myLikes_model_list = new ArrayList<>();
+//            apicall();
+//            if (alertDialog == null)
+//                alertDialog = AlertsUtils.createProgressDialog(getActivity());
+//            alertDialog.show();
+//            myLikes_adapter = new MyLikesAdapter(getActivity(), myLikes_model_list);
+//            recyclerView.setAdapter(myLikes_adapter);
+//            _areLecturesLoaded = true;
+//        }else{
+//
+////            myLikes_model_list.clear();
+//        }
+//    }
+
+
     @Override
-    public void onLikePressed() {
-        Log.d("hello","hi");
-    }
-    public void updatelikes(){
-        Log.d("asd","asd");
-        myLikes_model_list.clear();
-        apicall();
+    public void onStop() {
+        super.onStop();
+
     }
 }

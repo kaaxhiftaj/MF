@@ -2,12 +2,10 @@ package com.techease.mf.ui.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +19,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.techease.mf.LikeListener;
 import com.techease.mf.R;
 import com.techease.mf.ui.adapters.AllTimeAdapter;
-import com.techease.mf.ui.adapters.MyLikesAdapter;
 import com.techease.mf.ui.models.AllTimeModel;
 import com.techease.mf.utils.AlertsUtils;
 import com.techease.mf.utils.Configuration;
@@ -43,25 +39,26 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class ThisWeek extends Fragment implements LikeListener {
+public class ThisWeek extends Fragment {
 
 
     android.support.v7.app.AlertDialog alertDialog;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     String email, user_id;
-    ArrayList<AllTimeModel> all_model_list;
+    ArrayList<AllTimeModel> all_model_list = new ArrayList<>();
     AllTimeAdapter all_adapter;
     Unbinder unbinder;
     @BindView(R.id.rv_thisweek)
     RecyclerView recyclerView;
-    boolean _areLecturesLoaded = false;
+    private boolean _hasLoadedOnce = false;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.fragment_this_week, container, false);
+        View v = inflater.inflate(R.layout.fragment_this_week, container, false);
         unbinder = ButterKnife.bind(this, v);
 
         sharedPreferences = getActivity().getSharedPreferences(Configuration.MY_PREF, Context.MODE_PRIVATE);
@@ -73,13 +70,13 @@ public class ThisWeek extends Fragment implements LikeListener {
         if (InternetUtils.isNetworkConnected(getActivity())) {
 
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            all_model_list = new ArrayList<>();
+            all_adapter = new AllTimeAdapter(getActivity(), all_model_list);
+            recyclerView.setAdapter(all_adapter);
             apicall();
             if (alertDialog == null)
                 alertDialog = AlertsUtils.createProgressDialog(getActivity());
             alertDialog.show();
-            all_adapter = new AllTimeAdapter(getActivity(), all_model_list);
-            recyclerView.setAdapter(all_adapter);
+
 
         } else {
             Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_SHORT).show();
@@ -89,6 +86,22 @@ public class ThisWeek extends Fragment implements LikeListener {
         return v;
     }
 
+
+    @Override
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if (this.isVisible()) {
+            if (menuVisible && !_hasLoadedOnce) {
+                all_model_list.clear();
+                all_adapter.notifyDataSetChanged();
+                if (alertDialog == null)
+                    alertDialog = AlertsUtils.createProgressDialog(getActivity());
+                alertDialog.show();
+                apicall();
+                _hasLoadedOnce = true;
+            }
+        }
+    }
 
     private void apicall() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://menfashion.techeasesol.com/restapi/collectionByWeek"
@@ -134,7 +147,7 @@ public class ThisWeek extends Fragment implements LikeListener {
                             alertDialog.dismiss();
                         JSONObject jsonObject = new JSONObject(response);
                         String message = jsonObject.getString("message");
-                      //  Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -171,30 +184,6 @@ public class ThisWeek extends Fragment implements LikeListener {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         mRequestQueue.add(stringRequest);
     }
-//    @Override
-//    public void setUserVisibleHint(boolean isVisibleToUser) {
-//        super.setUserVisibleHint(isVisibleToUser);
-//        if (isVisibleToUser && !_areLecturesLoaded ) {
-//            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//            all_model_list = new ArrayList<>();
-//            apicall();
-//            if (alertDialog == null)
-//                alertDialog = AlertsUtils.createProgressDialog(getActivity());
-//            alertDialog.show();
-//            all_adapter = new AllTimeAdapter(getActivity(), all_model_list);
-//            recyclerView.setAdapter(all_adapter);
-//            _areLecturesLoaded = true;
-//        }
-//    }
-    public void TrendsLikes(){
-        Log.d("asd","asd");
-        all_model_list.clear();
-        apicall();
-    }
 
 
-    @Override
-    public void onLikePressed() {
-        Log.d("hello","hi");
-    }
 }

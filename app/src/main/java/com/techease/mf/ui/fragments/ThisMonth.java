@@ -2,7 +2,6 @@ package com.techease.mf.ui.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -46,17 +45,18 @@ public class ThisMonth extends Fragment {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     String email, user_id;
-    ArrayList<AllTimeModel> all_model_list;
+    ArrayList<AllTimeModel> all_model_list = new ArrayList<>();
     AllTimeAdapter all_adapter;
     Unbinder unbinder;
     @BindView(R.id.rv_thismonth)
     RecyclerView recyclerView;
+    private boolean _hasLoadedOnce = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.fragment_this_month, container, false);
+        View v = inflater.inflate(R.layout.fragment_this_month, container, false);
         unbinder = ButterKnife.bind(this, v);
 
         sharedPreferences = getActivity().getSharedPreferences(Configuration.MY_PREF, Context.MODE_PRIVATE);
@@ -68,13 +68,13 @@ public class ThisMonth extends Fragment {
         if (InternetUtils.isNetworkConnected(getActivity())) {
 
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            all_model_list = new ArrayList<>();
-            apicall();
-            if (alertDialog == null)
-                alertDialog = AlertsUtils.createProgressDialog(getActivity());
-            alertDialog.show();
             all_adapter = new AllTimeAdapter(getActivity(), all_model_list);
             recyclerView.setAdapter(all_adapter);
+            apicall();
+            if (alertDialog == null) {
+                alertDialog = AlertsUtils.createProgressDialog(getActivity());
+            }
+            alertDialog.show();
 
         } else {
             Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_SHORT).show();
@@ -131,7 +131,7 @@ public class ThisMonth extends Fragment {
                             alertDialog.dismiss();
                         JSONObject jsonObject = new JSONObject(response);
                         String message = jsonObject.getString("message");
-                    //    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                        //    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -169,5 +169,20 @@ public class ThisMonth extends Fragment {
         mRequestQueue.add(stringRequest);
     }
 
+    @Override
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if (this.isVisible()) {
+            if (menuVisible && !_hasLoadedOnce) {
+                all_model_list.clear();
+                all_adapter.notifyDataSetChanged();
+                if (alertDialog == null)
+                    alertDialog = AlertsUtils.createProgressDialog(getActivity());
+                alertDialog.show();
+                apicall();
+                _hasLoadedOnce = true;
+            }
+        }
+    }
 
 }

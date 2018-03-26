@@ -2,7 +2,6 @@ package com.techease.mf.ui.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,9 +21,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.techease.mf.R;
 import com.techease.mf.ui.adapters.AllTimeAdapter;
-import com.techease.mf.ui.adapters.MyLikesAdapter;
 import com.techease.mf.ui.models.AllTimeModel;
-import com.techease.mf.ui.models.MyLikesModel;
 import com.techease.mf.utils.AlertsUtils;
 import com.techease.mf.utils.Configuration;
 import com.techease.mf.utils.InternetUtils;
@@ -48,11 +45,12 @@ public class AllTime extends Fragment {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     String email, user_id;
-    ArrayList<AllTimeModel> all_model_list;
+    ArrayList<AllTimeModel> all_model_list = new ArrayList<>();
     AllTimeAdapter all_adapter;
     Unbinder unbinder;
     @BindView(R.id.rv_alltime)
     RecyclerView recyclerView;
+    private boolean _hasLoadedOnce = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -86,8 +84,21 @@ public class AllTime extends Fragment {
         return v;
     }
 
-
-
+    @Override
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if (this.isVisible()) {
+            if (menuVisible && !_hasLoadedOnce) {
+                all_model_list.clear();
+                all_adapter.notifyDataSetChanged();
+                if (alertDialog == null)
+                    alertDialog = AlertsUtils.createProgressDialog(getActivity());
+                alertDialog.show();
+                apicall();
+                _hasLoadedOnce = true;
+            }
+        }
+    }
 
     private void apicall() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://menfashion.techeasesol.com/restapi/collectionTrending"
