@@ -44,11 +44,11 @@ public interface WebServices {
     Call<CollectionResponse> getTrendingCollection(@Field("user_id") String userId);
 
     @FormUrlEncoded
-    @POST("collectionByMonth")
+    @POST("collectionByWeek")
     Call<CollectionResponse> getCollectionByWeek(@Field("user_id") String userId);
 
     @FormUrlEncoded
-    @POST("collectionByWeek")
+    @POST("collectionByMonth")
     Call<CollectionResponse> getCollectionByMonth(@Field("user_id") String userId);
 
     @FormUrlEncoded

@@ -79,7 +79,7 @@ public class AllTime extends Fragment {
     private void getTrendingCollection() {
 
         WebServices webServices = ApiFactory.create();
-        Call<CollectionResponse> call = webServices.getCollectionByWeek(user_id);
+        Call<CollectionResponse> call = webServices.getTrendingCollection(user_id);
         call.enqueue(new Callback<CollectionResponse>() {
             @Override
             public void onResponse(Call<CollectionResponse> call, retrofit2.Response<CollectionResponse> response) {
