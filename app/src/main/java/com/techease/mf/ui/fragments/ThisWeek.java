@@ -11,32 +11,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.techease.mf.R;
+import com.techease.mf.communication.ApiFactory;
+import com.techease.mf.communication.WebServices;
+import com.techease.mf.communication.response.CollectionResponse;
 import com.techease.mf.ui.adapters.AllTimeAdapter;
-import com.techease.mf.ui.models.AllTimeModel;
+import com.techease.mf.ui.models.CollectionModel;
 import com.techease.mf.utils.AlertsUtils;
 import com.techease.mf.utils.Configuration;
 import com.techease.mf.utils.InternetUtils;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 
 public class ThisWeek extends Fragment {
@@ -46,7 +37,7 @@ public class ThisWeek extends Fragment {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     String email, user_id;
-    ArrayList<AllTimeModel> all_model_list = new ArrayList<>();
+    ArrayList<CollectionModel> all_model_list = new ArrayList<>();
     AllTimeAdapter all_adapter;
     Unbinder unbinder;
     @BindView(R.id.rv_thisweek)
@@ -72,7 +63,7 @@ public class ThisWeek extends Fragment {
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             all_adapter = new AllTimeAdapter(getActivity(), all_model_list);
             recyclerView.setAdapter(all_adapter);
-            apicall();
+            getCollectionByWeek();
             if (alertDialog == null)
                 alertDialog = AlertsUtils.createProgressDialog(getActivity());
             alertDialog.show();
@@ -87,102 +78,37 @@ public class ThisWeek extends Fragment {
     }
 
 
-    @Override
-    public void setMenuVisibility(boolean menuVisible) {
-        super.setMenuVisibility(menuVisible);
-        if (this.isVisible()) {
-            if (menuVisible && !_hasLoadedOnce) {
-                all_model_list.clear();
-                all_adapter.notifyDataSetChanged();
-                if (alertDialog == null)
-                    alertDialog = AlertsUtils.createProgressDialog(getActivity());
-                alertDialog.show();
-                apicall();
-                _hasLoadedOnce = true;
-            }
-        }
-    }
-
-    private void apicall() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://menfashion.techeasesol.com/restapi/collectionByWeek"
-                , new Response.Listener<String>() {
+    private void getCollectionByWeek() {
+        WebServices webServices = ApiFactory.create();
+        Call<CollectionResponse> call = webServices.getCollectionByWeek(user_id);
+        call.enqueue(new Callback<CollectionResponse>() {
             @Override
-            public void onResponse(String response) {
-                if (response.contains("true")) {
-                    try {
-                        if (alertDialog != null)
-                            alertDialog.dismiss();
-                        JSONObject jsonObject = new JSONObject(response);
-                        JSONArray jsonArr = jsonObject.getJSONArray("collection");
-                        for (int i = 0; i < jsonArr.length(); i++) {
-                            JSONObject temp = jsonArr.getJSONObject(i);
-
-                            AllTimeModel model = new AllTimeModel();
-                            String id = temp.getString("id");
-                            String name = temp.getString("name");
-                            String image = temp.getString("image");
-                            String like = temp.getString("likes");
-                            String facebook = temp.getString("facebook");
-                            String liked = temp.getString("liked");
-
-                            model.setId(id);
-                            model.setName(name);
-                            model.setImage(image);
-                            model.setNoLikes(like);
-                            model.setFacebook(facebook);
-                            model.setLiked(liked);
-                            all_model_list.add(model);
-
-
-                        }
+            public void onResponse(Call<CollectionResponse> call, retrofit2.Response<CollectionResponse> response) {
+                if (alertDialog != null)
+                    alertDialog.dismiss();
+                if (response.body() != null) {
+                    if (response.body().isSuccess()) {
+                        all_model_list.addAll(response.body().getCollection());
                         all_adapter.notifyDataSetChanged();
 
-                    } catch (JSONException e) {
 
+                    } else {
+                        //todo show error message
                     }
                 } else {
-
-                    try {
-                        if (alertDialog != null)
-                            alertDialog.dismiss();
-                        JSONObject jsonObject = new JSONObject(response);
-                        String message = jsonObject.getString("message");
-                        //  Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        if (alertDialog != null)
-                            alertDialog.dismiss();
-                    }
+                    //todo show error message
                 }
+
             }
 
-        }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onFailure(Call<CollectionResponse> call, Throwable t) {
                 if (alertDialog != null)
                     alertDialog.dismiss();
 
+                //todo show error message
             }
-        }) {
-            @Override
-            public String getBodyContentType() {
-                return "application/x-www-form-urlencoded;charset=UTF-8";
-            }
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("user_id", user_id);
-                return params;
-            }
-
-        };
-        RequestQueue mRequestQueue = Volley.newRequestQueue(getActivity());
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(20000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        mRequestQueue.add(stringRequest);
+        });
     }
 
 

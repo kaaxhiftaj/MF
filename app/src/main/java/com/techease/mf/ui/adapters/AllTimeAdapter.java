@@ -26,7 +26,7 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.techease.mf.R;
 import com.techease.mf.ui.fragments.ProductsFragment;
-import com.techease.mf.ui.models.AllTimeModel;
+import com.techease.mf.ui.models.CollectionModel;
 import com.techease.mf.utils.Configuration;
 
 import org.json.JSONException;
@@ -42,14 +42,14 @@ import java.util.Map;
 
 public class AllTimeAdapter extends RecyclerView.Adapter<AllTimeAdapter.MyViewHolder> {
 
-    ArrayList<AllTimeModel> allArrayList;
+    ArrayList<CollectionModel> allArrayList;
     Context context;
     String collection_id;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     String user_id;
 
-    public AllTimeAdapter(Context context, ArrayList<AllTimeModel> allLikesModels) {
+    public AllTimeAdapter(Context context, ArrayList<CollectionModel> allLikesModels) {
         this.context = context;
         this.allArrayList = allLikesModels;
     }
@@ -67,9 +67,9 @@ public class AllTimeAdapter extends RecyclerView.Adapter<AllTimeAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        final AllTimeModel model = allArrayList.get(position);
+        final CollectionModel model = allArrayList.get(position);
 
-        holder.noLikes.setText(model.getNoLikes() + " Likes");
+        holder.noLikes.setText(model.getLikes() + " Likes");
         Glide.with(context).load(model.getImage()).into(holder.item_image);
 
         if (model.getLiked().equals("true")) {
@@ -90,7 +90,7 @@ public class AllTimeAdapter extends RecyclerView.Adapter<AllTimeAdapter.MyViewHo
             @Override
             public void onClick(View v) {
 
-                collection_id = model.getId();
+                collection_id = String.valueOf(model.getId());
                 if (!user_id.equals("")) {
                     holder.like.setBackgroundColor(Color.parseColor("#000000"));
                     holder.likeLayout.setBackgroundColor(Color.parseColor("#000000"));
@@ -103,12 +103,12 @@ public class AllTimeAdapter extends RecyclerView.Adapter<AllTimeAdapter.MyViewHo
                                 Log.d("zma liked res", response);
                                 try {
                                     JSONObject jsonObject = new JSONObject(response);
-                                    if (jsonObject.getInt("status") == 200){
+                                    if (jsonObject.getInt("status") == 200) {
                                         holder.like.setBackgroundColor(Color.parseColor("#000000"));
                                         holder.likeLayout.setBackgroundColor(Color.parseColor("#000000"));
                                         holder.share.setBackgroundColor(Color.parseColor("#000000"));
                                         model.setLiked("true");
-                                    }else if (jsonObject.getInt("status") == 201) {
+                                    } else if (jsonObject.getInt("status") == 201) {
                                         holder.like.setBackgroundColor(Color.parseColor("#535c68"));
                                         holder.likeLayout.setBackgroundColor(Color.parseColor("#535c68"));
                                         holder.share.setBackgroundColor(Color.parseColor("#535c68"));
@@ -158,7 +158,7 @@ public class AllTimeAdapter extends RecyclerView.Adapter<AllTimeAdapter.MyViewHo
             @Override
             public void onClick(View v) {
 
-                String collection_id = model.getId();
+                String collection_id = String.valueOf(model.getId());
                 Intent i = new Intent(context, ProductsFragment.class);
                 i.putExtra("collection_id", collection_id);
                 context.startActivity(i);

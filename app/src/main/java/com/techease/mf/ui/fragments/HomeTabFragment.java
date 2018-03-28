@@ -5,19 +5,17 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.techease.mf.LikeListener;
 import com.techease.mf.R;
 import com.techease.mf.ui.adapters.MainTabsAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeTabFragment extends Fragment implements LikeListener{
+public class HomeTabFragment extends Fragment {
 
 
     public HomeTabFragment() {
@@ -35,7 +33,7 @@ public class HomeTabFragment extends Fragment implements LikeListener{
 //         Set the adapter onto the view pager
         MainTabsAdapter adapter = new MainTabsAdapter(getActivity().getSupportFragmentManager());
         //getFragmentManager().beginTransaction().replace(R.id.container, new HomeTabFragment());
-            viewPager.setOffscreenPageLimit(2);
+        viewPager.setOffscreenPageLimit(2);
         viewPager.setAdapter(adapter);
 
 
@@ -45,12 +43,8 @@ public class HomeTabFragment extends Fragment implements LikeListener{
 
         // Create an adapter that knows which fragment should be shown on each page
 
-        
+
         return view;
     }
 
-    @Override
-    public void onLikePressed() {
-        Log.d("asd","asd");
-    }
 }

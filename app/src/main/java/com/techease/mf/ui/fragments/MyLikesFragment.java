@@ -1,45 +1,32 @@
 package com.techease.mf.ui.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.techease.mf.R;
-import com.techease.mf.ui.activities.Profile;
+import com.techease.mf.communication.ApiFactory;
+import com.techease.mf.communication.WebServices;
+import com.techease.mf.communication.response.CollectionResponse;
 import com.techease.mf.ui.adapters.MyLikesAdapter;
-import com.techease.mf.ui.models.MyLikesModel;
+import com.techease.mf.ui.models.CollectionModel;
 import com.techease.mf.utils.AlertsUtils;
 import com.techease.mf.utils.Configuration;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 
 public class MyLikesFragment extends Fragment {
@@ -48,7 +35,7 @@ public class MyLikesFragment extends Fragment {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     String email, user_id;
-    ArrayList<MyLikesModel> myLikes_model_list = new ArrayList<>();
+    ArrayList<CollectionModel> myLikes_model_list = new ArrayList<>();
     MyLikesAdapter myLikes_adapter;
     Unbinder unbinder;
     boolean _areLecturesLoaded = false;
@@ -73,114 +60,50 @@ public class MyLikesFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         myLikes_adapter = new MyLikesAdapter(getActivity(), myLikes_model_list);
         recyclerView.setAdapter(myLikes_adapter);
-
+        if (alertDialog == null)
+            alertDialog = AlertsUtils.createProgressDialog(getActivity());
+        alertDialog.show();
+        getUserFavouriteCollections();
         return v;
     }
-//ao zma pa khyal, kho pa my likes bande hm bel ta rawan de
 
-    private void apicall() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "http://menfashion.techeasesol.com/restapi/userFavorites"
-                , new Response.Listener<String>() {
+
+    private void getUserFavouriteCollections() {
+        WebServices webServices = ApiFactory.create();
+
+        Call<CollectionResponse> call = webServices.getUserFavouriteCollection(user_id);
+        call.enqueue(new Callback<CollectionResponse>() {
             @Override
-            public void onResponse(String response) {
-                if (response.contains("true")) {
-                    try {
+            public void onResponse(Call<CollectionResponse> call, retrofit2.Response<CollectionResponse> response) {
+                if (alertDialog != null)
+                    alertDialog.dismiss();
+                if (response.body() != null) {
+                    if (response.body().isSuccess()) {
                         tvEmptyList.setVisibility(View.GONE);
-                        Log.d("zma my likes respo", response);
-                        if (alertDialog != null)
-                            alertDialog.dismiss();
-                        JSONObject jsonObject = new JSONObject(response);
-                        if (jsonObject.getString("message").equals("No Favorites")) {
+                        if (response.body().getMessage().equals("No Favorites")) {
                             tvEmptyList.setVisibility(View.VISIBLE);
+                        } else {
+                            myLikes_model_list.addAll(response.body().getCollection());
+                            myLikes_adapter.notifyDataSetChanged();
                         }
-                        JSONArray jsonArr = jsonObject.getJSONArray("collection");
 
-                        for (int i = 0; i < jsonArr.length(); i++) {
-                            JSONObject temp = jsonArr.getJSONObject(i);
-                            MyLikesModel model = new MyLikesModel();
-                            String id = temp.getString("id");
-                            String name = temp.getString("name");
-                            String image = temp.getString("image");
-                            String like = temp.getString("likes");
-                            String facebook = temp.getString("facebook");
-                            model.setId(id);
-                            model.setName(name);
-                            model.setImage(image);
-                            model.setNoLikes(like);
-                            model.setFacebook(facebook);
-                            myLikes_model_list.add(model);
-                        }
-                        myLikes_adapter.notifyDataSetChanged();
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        if (alertDialog != null)
-                            alertDialog.dismiss();
+                    } else {
+                        //todo show error message
                     }
                 } else {
-                    startActivity(new Intent(getActivity(), Profile.class));
-                    try {
-                        if (alertDialog != null) {
-                            alertDialog.dismiss();
-
-                            JSONObject jsonObject = new JSONObject(response);
-                            String message = jsonObject.getString("message");
-
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        if (alertDialog != null)
-                            alertDialog.dismiss();
-                    }
+                    //todo show error message
                 }
             }
 
-        }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onFailure(Call<CollectionResponse> call, Throwable t) {
                 if (alertDialog != null)
                     alertDialog.dismiss();
-
+                //todo show error message
             }
-        }) {
-            @Override
-            public String getBodyContentType() {
-                return "application/x-www-form-urlencoded;charset=UTF-8";
-            }
+        });
 
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("user_id", user_id);
-                return params;
-            }
-
-        };
-        RequestQueue mRequestQueue = Volley.newRequestQueue(getActivity());
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(20000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        mRequestQueue.add(stringRequest);
     }
 
-
-    @Override
-    public void setMenuVisibility(boolean menuVisible) {
-        super.setMenuVisibility(menuVisible);
-        if (menuVisible && !_areLecturesLoaded) {
-            myLikes_model_list.clear();
-            myLikes_adapter.notifyDataSetChanged();
-            apicall();
-            if (alertDialog == null)
-                alertDialog = AlertsUtils.createProgressDialog(getActivity());
-            alertDialog.show();
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
 }

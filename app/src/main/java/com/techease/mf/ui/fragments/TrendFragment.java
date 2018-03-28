@@ -1,29 +1,22 @@
 package com.techease.mf.ui.fragments;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TableLayout;
-import android.widget.Toast;
 
 import com.techease.mf.LikeListener;
 import com.techease.mf.R;
 import com.techease.mf.ui.adapters.SimpleFragmentPager;
+import com.techease.mf.ui.models.NewModel;
 
-import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class TrendFragment extends Fragment implements LikeListener{
+public class TrendFragment extends Fragment {
 
 
     Unbinder unbinder;
@@ -48,8 +41,5 @@ public class TrendFragment extends Fragment implements LikeListener{
     }
 
 
-    @Override
-    public void onLikePressed() {
 
-    }
 }
