@@ -145,7 +145,6 @@ public class MyLikesAdapter extends RecyclerView.Adapter<MyLikesAdapter.MyViewHo
             public void onResponse(String response) {
                 if (response.contains("true")) {
 
-                    Toast.makeText(context, "Liked", Toast.LENGTH_SHORT).show();
                 }
             }
 

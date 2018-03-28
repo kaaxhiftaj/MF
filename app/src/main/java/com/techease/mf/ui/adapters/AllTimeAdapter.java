@@ -119,7 +119,6 @@ public class AllTimeAdapter extends RecyclerView.Adapter<AllTimeAdapter.MyViewHo
 
                                 }
 
-                                Toast.makeText(context, "Liked", Toast.LENGTH_SHORT).show();
                             }
                         }
 

@@ -105,12 +105,12 @@ public class NewFragment extends Fragment {
         super.setMenuVisibility(menuVisible);
         if (this.isVisible()) {
             if (menuVisible) {
-                new_model_list.clear();
-                new_adapter.notifyDataSetChanged();
-                if (alertDialog == null)
-                    alertDialog = AlertsUtils.createProgressDialog(getActivity());
-                alertDialog.show();
-                apicall();
+//                new_model_list.clear();
+//                new_adapter.notifyDataSetChanged();
+//                if (alertDialog == null)
+//                    alertDialog = AlertsUtils.createProgressDialog(getActivity());
+//                alertDialog.show();
+//                apicall();
             }
         }
     }
@@ -120,6 +120,7 @@ public class NewFragment extends Fragment {
                 , new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                new_model_list.clear();
                 if (response.contains("true")) {
                     try {
                         Log.d("zma new response", response);

@@ -126,7 +126,7 @@ public class MyLikesFragment extends Fragment {
 
                             JSONObject jsonObject = new JSONObject(response);
                             String message = jsonObject.getString("message");
-                            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+
                         }
 
                     } catch (JSONException e) {
