@@ -129,6 +129,7 @@ public class NewFragment extends Fragment {
 
     public void updateLikeFragment(CollectionModel model) {
         boolean hasCollection = false;
+        int position = -1;
         for (int i = 0; i < new_model_list.size(); i++) {
             if (new_model_list.get(i).getId() == model.getId()) {
                 new_model_list.get(i).setLiked(model.getLiked());

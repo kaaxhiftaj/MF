@@ -1,6 +1,7 @@
 package com.techease.mf.ui.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import com.techease.mf.R;
 import com.techease.mf.communication.ApiFactory;
 import com.techease.mf.communication.WebServices;
 import com.techease.mf.communication.response.CollectionResponse;
+import com.techease.mf.ui.activities.Profile;
 import com.techease.mf.ui.adapters.MyLikesAdapter;
 import com.techease.mf.ui.models.CollectionModel;
 import com.techease.mf.utils.AlertsUtils;
@@ -108,8 +110,11 @@ public class MyLikesFragment extends Fragment {
 
     public void updateLikeFragment(CollectionModel model) {
         boolean hasCollection = false;
-        for (CollectionModel collectionModel : myLikes_model_list) {
-            if (collectionModel.getId() == model.getId()) {
+        int position = -1;
+        for (int i = 0; i < myLikes_model_list.size(); i++) {
+            if (myLikes_model_list.get(i).getId() == model.getId()) {
+                myLikes_model_list.get(i).setLiked(model.getLiked());
+                position = i;
                 hasCollection = true;
                 break;
             }
@@ -118,6 +123,22 @@ public class MyLikesFragment extends Fragment {
             myLikes_model_list.add(model);
             if (myLikes_adapter != null)
                 myLikes_adapter.notifyDataSetChanged();
+        } else {
+            if (position > -1) {
+                myLikes_model_list.remove(position);
+                myLikes_adapter.notifyItemRemoved(position);
+            }
+        }
+
+    }
+
+    @Override
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if (menuVisible) {
+            if (user_id.isEmpty()) {
+                startActivity(new Intent(getActivity(), Profile.class));
+            }
         }
     }
 }

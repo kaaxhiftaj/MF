@@ -89,7 +89,17 @@ public class NewAdapter extends RecyclerView.Adapter<NewAdapter.MyViewHolder> {
                     holder.like.setBackgroundColor(Color.parseColor("#000000"));
                     holder.likeLayout.setBackgroundColor(Color.parseColor("#000000"));
                     holder.share.setBackgroundColor(Color.parseColor("#000000"));
-                    model.setLiked("true");
+                    if (model.getLiked().equals("true")) {
+                        holder.like.setBackgroundColor(Color.parseColor("#535c68"));
+                        holder.likeLayout.setBackgroundColor(Color.parseColor("#535c68"));
+                        holder.share.setBackgroundColor(Color.parseColor("#535c68"));
+                        model.setLiked("false");
+                    } else {
+                        model.setLiked("true");
+                        holder.like.setBackgroundColor(Color.parseColor("#000000"));
+                        holder.likeLayout.setBackgroundColor(Color.parseColor("#000000"));
+                        holder.share.setBackgroundColor(Color.parseColor("#000000"));
+                    }
                     LikeListener likeListener = (LikeListener) context;
                     likeListener.onLikePressed(model);
                     WebServices webServices = ApiFactory.create();
@@ -99,17 +109,7 @@ public class NewAdapter extends RecyclerView.Adapter<NewAdapter.MyViewHolder> {
                         @Override
                         public void onResponse(Call<BaseResponse> call, retrofit2.Response<BaseResponse> response) {
                             if (response.body() != null) {
-                                if (response.body().isSuccess()) {
-                                    holder.like.setBackgroundColor(Color.parseColor("#000000"));
-                                    holder.likeLayout.setBackgroundColor(Color.parseColor("#000000"));
-                                    holder.share.setBackgroundColor(Color.parseColor("#000000"));
-                                    model.setLiked("true");
-                                } else {
-                                    holder.like.setBackgroundColor(Color.parseColor("#535c68"));
-                                    holder.likeLayout.setBackgroundColor(Color.parseColor("#535c68"));
-                                    holder.share.setBackgroundColor(Color.parseColor("#535c68"));
-                                    model.setLiked("false");
-                                }
+                                //like and unlike done in backend
                             } else {
                                 //todo show failure message
                             }
