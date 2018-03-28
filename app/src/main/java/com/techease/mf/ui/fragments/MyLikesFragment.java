@@ -120,7 +120,7 @@ public class MyLikesFragment extends Fragment {
             }
         }
         if (!hasCollection) {
-            myLikes_model_list.add(model);
+            myLikes_model_list.add(0, model);
             if (myLikes_adapter != null)
                 myLikes_adapter.notifyDataSetChanged();
         } else {
