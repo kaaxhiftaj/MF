@@ -132,7 +132,7 @@ public class NewAdapter extends RecyclerView.Adapter<NewAdapter.MyViewHolder> {
 
                 int collection_id = model.getId();
                 Intent i = new Intent(context, ProductsFragment.class);
-                i.putExtra("collection_id", collection_id);
+                i.putExtra("collection_id", String.valueOf(collection_id));
                 context.startActivity(i);
 
             }
