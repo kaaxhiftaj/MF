@@ -48,6 +48,10 @@ public class HomeTabFragment extends Fragment {
     }
 
     public void updateLikeFragment(CollectionModel model) {
+        NewFragment newFragment = (NewFragment) adapter.getItem(0);
+        newFragment.updateLikeFragment(model);
+        TrendFragment trendFragment = (TrendFragment) adapter.getItem(1);
+        trendFragment.updateLikeFragment(model);
         MyLikesFragment likesFragment = (MyLikesFragment) adapter.getItem(2);
         likesFragment.updateLikeFragment(model);
     }

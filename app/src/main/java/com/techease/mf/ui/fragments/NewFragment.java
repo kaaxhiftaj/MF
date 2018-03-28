@@ -57,7 +57,6 @@ public class NewFragment extends Fragment {
 
         sharedPreferences = getActivity().getSharedPreferences(Configuration.MY_PREF, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        editor.putString("user_id", "4").commit();
         email = sharedPreferences.getString("email", "");
         user_id = sharedPreferences.getString("user_id", "");
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -128,4 +127,18 @@ public class NewFragment extends Fragment {
 
     }
 
+    public void updateLikeFragment(CollectionModel model) {
+        boolean hasCollection = false;
+        for (int i = 0; i < new_model_list.size(); i++) {
+            if (new_model_list.get(i).getId() == model.getId()) {
+                new_model_list.get(i).setLiked(model.getLiked());
+                hasCollection = true;
+                break;
+            }
+        }
+        if (hasCollection) {
+            if (new_adapter != null)
+                new_adapter.notifyDataSetChanged();
+        }
+    }
 }

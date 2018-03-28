@@ -89,6 +89,7 @@ public class NewAdapter extends RecyclerView.Adapter<NewAdapter.MyViewHolder> {
                     holder.like.setBackgroundColor(Color.parseColor("#000000"));
                     holder.likeLayout.setBackgroundColor(Color.parseColor("#000000"));
                     holder.share.setBackgroundColor(Color.parseColor("#000000"));
+                    model.setLiked("true");
                     LikeListener likeListener = (LikeListener) context;
                     likeListener.onLikePressed(model);
                     WebServices webServices = ApiFactory.create();

@@ -88,6 +88,7 @@ public class AllTimeAdapter extends RecyclerView.Adapter<AllTimeAdapter.MyViewHo
                     holder.like.setBackgroundColor(Color.parseColor("#000000"));
                     holder.likeLayout.setBackgroundColor(Color.parseColor("#000000"));
                     holder.share.setBackgroundColor(Color.parseColor("#000000"));
+                    model.setLiked("liked");
                     LikeListener likeListener = (LikeListener) context;
                     likeListener.onLikePressed(model);
                     WebServices webServices = ApiFactory.create();

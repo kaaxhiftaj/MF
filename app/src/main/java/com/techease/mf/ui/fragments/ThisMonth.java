@@ -103,5 +103,19 @@ public class ThisMonth extends Fragment {
         });
     }
 
+    public void updateLikeFragment(CollectionModel model) {
+        boolean hasCollection = false;
+        for (int i = 0; i < all_model_list.size(); i++) {
+            if (all_model_list.get(i).getId() == model.getId()) {
+                all_model_list.get(i).setLiked(model.getLiked());
+                hasCollection = true;
+                break;
+            }
+        }
+        if (hasCollection) {
+            if (all_adapter != null)
+                all_adapter.notifyDataSetChanged();
+        }
+    }
 
 }
