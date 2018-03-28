@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,26 +14,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.techease.mf.LikeListener;
 import com.techease.mf.R;
+import com.techease.mf.communication.ApiFactory;
+import com.techease.mf.communication.WebServices;
+import com.techease.mf.communication.response.BaseResponse;
 import com.techease.mf.ui.fragments.ProductsFragment;
 import com.techease.mf.ui.models.CollectionModel;
 import com.techease.mf.utils.Configuration;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
 
 /**
  * Created by kaxhiftaj on 3/6/18.
@@ -44,7 +37,7 @@ public class AllTimeAdapter extends RecyclerView.Adapter<AllTimeAdapter.MyViewHo
 
     ArrayList<CollectionModel> allArrayList;
     Context context;
-    String collection_id;
+    int collection_id;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     String user_id;
@@ -90,64 +83,42 @@ public class AllTimeAdapter extends RecyclerView.Adapter<AllTimeAdapter.MyViewHo
             @Override
             public void onClick(View v) {
 
-                collection_id = String.valueOf(model.getId());
+                collection_id = model.getId();
                 if (!user_id.equals("")) {
                     holder.like.setBackgroundColor(Color.parseColor("#000000"));
                     holder.likeLayout.setBackgroundColor(Color.parseColor("#000000"));
                     holder.share.setBackgroundColor(Color.parseColor("#000000"));
-                    StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://menfashion.techeasesol.com/restapi/userliked"
-                            , new Response.Listener<String>() {
+                    LikeListener likeListener = (LikeListener) context;
+                    likeListener.onLikePressed(model);
+                    WebServices webServices = ApiFactory.create();
+
+                    Call<BaseResponse> call = webServices.likeCollection(user_id, collection_id);
+                    call.enqueue(new Callback<BaseResponse>() {
                         @Override
-                        public void onResponse(String response) {
-                            if (response.contains("true")) {
-                                Log.d("zma liked res", response);
-                                try {
-                                    JSONObject jsonObject = new JSONObject(response);
-                                    if (jsonObject.getInt("status") == 200) {
-                                        holder.like.setBackgroundColor(Color.parseColor("#000000"));
-                                        holder.likeLayout.setBackgroundColor(Color.parseColor("#000000"));
-                                        holder.share.setBackgroundColor(Color.parseColor("#000000"));
-                                        model.setLiked("true");
-                                    } else if (jsonObject.getInt("status") == 201) {
-                                        holder.like.setBackgroundColor(Color.parseColor("#535c68"));
-                                        holder.likeLayout.setBackgroundColor(Color.parseColor("#535c68"));
-                                        holder.share.setBackgroundColor(Color.parseColor("#535c68"));
-                                        model.setLiked("false");
-                                    }
-                                } catch (JSONException e) {
-
-
+                        public void onResponse(Call<BaseResponse> call, retrofit2.Response<BaseResponse> response) {
+                            if (response.body() != null) {
+                                if (response.body().isSuccess()) {
+                                    holder.like.setBackgroundColor(Color.parseColor("#000000"));
+                                    holder.likeLayout.setBackgroundColor(Color.parseColor("#000000"));
+                                    holder.share.setBackgroundColor(Color.parseColor("#000000"));
+                                    model.setLiked("true");
+                                } else {
+                                    holder.like.setBackgroundColor(Color.parseColor("#535c68"));
+                                    holder.likeLayout.setBackgroundColor(Color.parseColor("#535c68"));
+                                    holder.share.setBackgroundColor(Color.parseColor("#535c68"));
+                                    model.setLiked("false");
                                 }
-
+                            } else {
+                                //todo show failure message
                             }
                         }
 
-                    }, new Response.ErrorListener() {
                         @Override
-                        public void onErrorResponse(VolleyError error) {
-
-
+                        public void onFailure(Call<BaseResponse> call, Throwable t) {
+                            //todo show failure message
                         }
-                    }) {
-                        @Override
-                        public String getBodyContentType() {
-                            return "application/x-www-form-urlencoded;charset=UTF-8";
-                        }
+                    });
 
-                        @Override
-                        protected Map<String, String> getParams() throws AuthFailureError {
-                            Map<String, String> params = new HashMap<>();
-                            params.put("user_id", user_id);
-                            params.put("collection_id", collection_id);
-                            return params;
-                        }
-
-                    };
-                    RequestQueue mRequestQueue = Volley.newRequestQueue(context);
-                    stringRequest.setRetryPolicy(new DefaultRetryPolicy(20000,
-                            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-                    mRequestQueue.add(stringRequest);
                 } else {
                     Toast.makeText(context, "Please Login First", Toast.LENGTH_SHORT).show();
                 }
@@ -206,46 +177,6 @@ public class AllTimeAdapter extends RecyclerView.Adapter<AllTimeAdapter.MyViewHo
         }
 
 
-    }
-
-
-    private void apicall() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://menfashion.techeasesol.com/restapi/userliked"
-                , new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if (response.contains("true")) {
-
-                    Toast.makeText(context, "Liked", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-
-            }
-        }) {
-            @Override
-            public String getBodyContentType() {
-                return "application/x-www-form-urlencoded;charset=UTF-8";
-            }
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("user_id", user_id);
-                params.put("collection_id", collection_id);
-                return params;
-            }
-
-        };
-        RequestQueue mRequestQueue = Volley.newRequestQueue(context);
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(20000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        mRequestQueue.add(stringRequest);
     }
 }
 

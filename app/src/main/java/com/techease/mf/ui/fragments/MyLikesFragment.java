@@ -106,4 +106,18 @@ public class MyLikesFragment extends Fragment {
 
     }
 
+    public void updateLikeFragment(CollectionModel model) {
+        boolean hasCollection = false;
+        for (CollectionModel collectionModel : myLikes_model_list) {
+            if (collectionModel.getId() == model.getId()) {
+                hasCollection = true;
+                break;
+            }
+        }
+        if (!hasCollection) {
+            myLikes_model_list.add(model);
+            if (myLikes_adapter != null)
+                myLikes_adapter.notifyDataSetChanged();
+        }
+    }
 }

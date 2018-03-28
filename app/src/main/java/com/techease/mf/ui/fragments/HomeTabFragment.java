@@ -11,12 +11,14 @@ import android.view.ViewGroup;
 
 import com.techease.mf.R;
 import com.techease.mf.ui.adapters.MainTabsAdapter;
+import com.techease.mf.ui.models.CollectionModel;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class HomeTabFragment extends Fragment {
 
+    MainTabsAdapter adapter;
 
     public HomeTabFragment() {
         // Required empty public constructor
@@ -31,7 +33,7 @@ public class HomeTabFragment extends Fragment {
 
         ViewPager viewPager = view.findViewById(R.id.viewpager);
 //         Set the adapter onto the view pager
-        MainTabsAdapter adapter = new MainTabsAdapter(getActivity().getSupportFragmentManager());
+        adapter = new MainTabsAdapter(getActivity().getSupportFragmentManager());
         //getFragmentManager().beginTransaction().replace(R.id.container, new HomeTabFragment());
         viewPager.setOffscreenPageLimit(2);
         viewPager.setAdapter(adapter);
@@ -42,9 +44,12 @@ public class HomeTabFragment extends Fragment {
         tabLayout.setupWithViewPager(viewPager);
 
         // Create an adapter that knows which fragment should be shown on each page
-
-
         return view;
+    }
+
+    public void updateLikeFragment(CollectionModel model) {
+        MyLikesFragment likesFragment = (MyLikesFragment) adapter.getItem(2);
+        likesFragment.updateLikeFragment(model);
     }
 
 }
