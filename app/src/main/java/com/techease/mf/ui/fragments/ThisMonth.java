@@ -86,9 +86,10 @@ public class ThisMonth extends Fragment {
                     alertDialog.dismiss();
 
                 if (response.body() != null) {
-                    all_model_list.addAll(response.body().getCollection());
-                    all_adapter.notifyDataSetChanged();
-
+                    if (response.body().getCollection() != null) {
+                        all_model_list.addAll(response.body().getCollection());
+                        all_adapter.notifyDataSetChanged();
+                    }
                 } else {
                     //todo show error message
                 }

@@ -13,12 +13,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.techease.mf.LikeListener;
 import com.techease.mf.R;
+import com.techease.mf.communication.ApiFactory;
+import com.techease.mf.communication.WebServices;
+import com.techease.mf.communication.response.BaseResponse;
 import com.techease.mf.ui.fragments.ProductsFragment;
 import com.techease.mf.ui.models.CollectionModel;
 import com.techease.mf.utils.Configuration;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
 
 /**
  * Created by kaxhiftaj on 3/6/18.
@@ -50,9 +57,9 @@ public class MyLikesAdapter extends RecyclerView.Adapter<MyLikesAdapter.MyViewHo
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final CollectionModel model = myLikesArrayList.get(position);
-
+        model.setLiked("true");
         holder.noLikes.setText(model.getLikes() + " Likes");
         Glide.with(context).load(model.getImage()).into(holder.item_image);
 
@@ -91,6 +98,38 @@ public class MyLikesAdapter extends RecyclerView.Adapter<MyLikesAdapter.MyViewHo
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, message);
                 context.startActivity(Intent.createChooser(share, "Share"));
+            }
+        });
+        holder.like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                collection_id = model.getId();
+                if (!user_id.equals("")) {
+                    model.setLiked("false");
+                    LikeListener likeListener = (LikeListener) context;
+                    likeListener.onLikePressed(model);
+                    WebServices webServices = ApiFactory.create();
+
+                    Call<BaseResponse> call = webServices.likeCollection(user_id, collection_id);
+                    call.enqueue(new Callback<BaseResponse>() {
+                        @Override
+                        public void onResponse(Call<BaseResponse> call, retrofit2.Response<BaseResponse> response) {
+                            if (response.body() != null) {
+                                //like and unlike done in backend
+                            } else {
+                                //todo show failure message
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<BaseResponse> call, Throwable t) {
+                            //todo show failure message
+                        }
+                    });
+
+                } else {
+                    Toast.makeText(context, "Please Login First", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
