@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,11 +70,13 @@ public class AllTimeAdapter extends RecyclerView.Adapter<AllTimeAdapter.MyViewHo
 
             //   holder.like.setImageResource(R.drawable.like);
             holder.like.setBackgroundColor(Color.parseColor("#000000"));
+            holder.like.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.like));
             holder.likeLayout.setBackgroundColor(Color.parseColor("#000000"));
             holder.share.setBackgroundColor(Color.parseColor("#000000"));
 
         } else {
             //    holder.like.setImageResource(R.drawable.unlike);
+            holder.like.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.unlike));
             holder.like.setBackgroundColor(Color.parseColor("#535c68"));
             holder.likeLayout.setBackgroundColor(Color.parseColor("#535c68"));
             holder.share.setBackgroundColor(Color.parseColor("#535c68"));
