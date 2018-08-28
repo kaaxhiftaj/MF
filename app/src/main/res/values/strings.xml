@@ -1,10 +1,9 @@
 <resources>
-    <string name="app_name">MF</string>
+    <string name="app_name">Men\'s Fashion</string>
     <string name="btn_ok">OK</string>
     <string name="fb_id">1775634272744153</string>
     <string name="fb_login_protocol_scheme">fb1775634272744153</string>
     <string name="likes">Likes</string>
-
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">NEW</string>
