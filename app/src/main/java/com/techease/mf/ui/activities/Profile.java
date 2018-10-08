@@ -176,7 +176,7 @@ public class Profile extends AppCompatActivity {
 
 
     private void apicall() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://menfashion.techeasesol.com/restapi/signup"
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://85.214.88.81/restapi/signup"
                 , new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

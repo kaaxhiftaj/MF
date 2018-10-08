@@ -109,7 +109,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyView
 
 
     private void apicall() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://menfashion.techeasesol.com/restapi/userliked"
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://85.214.88.81/restapi/userliked"
                 , new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

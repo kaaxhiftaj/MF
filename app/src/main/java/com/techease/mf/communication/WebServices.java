@@ -25,7 +25,7 @@ public interface WebServices {
             .build();
 
     WebServices SERVICE = new Retrofit.Builder()
-            .baseUrl("http://menfashion.techeasesol.com/restapi/")
+            .baseUrl("http://85.214.88.81/restapi/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(WebServices.class);

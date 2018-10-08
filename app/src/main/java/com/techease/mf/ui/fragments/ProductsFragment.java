@@ -4,16 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -25,11 +22,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.techease.mf.R;
-import com.techease.mf.ui.activities.HomeActivity;
 import com.techease.mf.ui.activities.Profile;
-import com.techease.mf.ui.adapters.AllTimeAdapter;
 import com.techease.mf.ui.adapters.ProductsAdapter;
-import com.techease.mf.ui.models.AllTimeModel;
 import com.techease.mf.ui.models.ProductsModel;
 import com.techease.mf.utils.AlertsUtils;
 import com.techease.mf.utils.Configuration;
@@ -117,7 +111,7 @@ public class ProductsFragment extends AppCompatActivity {
 
 
     private void apicall() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://menfashion.techeasesol.com/restapi/collectionProducts"
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://85.214.88.81/restapi/collectionProducts"
                 , new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
