@@ -3,6 +3,14 @@ apply plugin: 'com.android.application'
 
 
 android {
+    signingConfigs {
+        release {
+            keyAlias 'Men Fashion'
+            keyPassword 'menfashion'
+            storePassword 'menfashion'
+            storeFile file('/Users/k.zahid/StudioProjects/MF/mf_keystore.jks')
+        }
+    }
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.techease.mf"
@@ -23,6 +31,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
         applicationVariants.all { variant ->
             variant.outputs.all { output ->
