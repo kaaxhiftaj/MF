@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context="com.techease.mf.ui.activities.LoginActivity">
+    tools:context="com.techease.mensfashion.ui.activities.LoginActivity">
 
 
 

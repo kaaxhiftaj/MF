@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.techease.mf.ui.fragments.HomeTabFragment">
+    tools:context="com.techease.mensfashion.ui.fragments.HomeTabFragment">
 
     <android.support.design.widget.TabLayout
         android:id="@+id/sliding_tabs"

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.techease.mf.ui.fragments.TrendFragment">
+    tools:context="com.techease.mensfashion.ui.fragments.TrendFragment">
 
     <android.support.design.widget.TabLayout
         android:id="@+id/sliding_tab"

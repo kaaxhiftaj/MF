@@ -7,7 +7,7 @@
     android:gravity="center"
     android:id="@+id/container"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.techease.mf.ui.activities.HomeActivity">
+    tools:context="com.techease.mensfashion.ui.activities.HomeActivity">
 
 
 

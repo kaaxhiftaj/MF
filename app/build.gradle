@@ -13,8 +13,8 @@ android {
     }
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.techease.mf"
-        minSdkVersion 21
+        applicationId "com.techease.mensfashion"
+        minSdkVersion 19
         targetSdkVersion 28
         buildToolsVersion '28.0.3'
         versionCode 1
@@ -71,6 +71,7 @@ dependencies {
     implementation 'me.zhanghai.android.materialratingbar:library:1.2.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.github.bumptech.glide:glide:4.8.0'
+    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
     implementation 'com.facebook.android:facebook-login:4.39.0'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.okhttp3:okhttp:3.12.0'

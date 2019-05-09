@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context="com.techease.mf.ui.fragments.MyLikesFragment">
+    tools:context="com.techease.mensfashion.ui.fragments.MyLikesFragment">
 
 
     <android.support.v7.widget.RecyclerView

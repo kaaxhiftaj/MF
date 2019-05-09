@@ -8,7 +8,7 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="com.techease.mf.ui.activities.Profile">
+    tools:context="com.techease.mensfashion.ui.activities.Profile">
 
 
     <ImageView
