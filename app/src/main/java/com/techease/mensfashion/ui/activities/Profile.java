@@ -98,11 +98,8 @@ public class Profile extends AppCompatActivity {
         pic = sharedPreferences.getString("pic", "");
 
         if (token.equals("")) {
-
             //Login na dy
-
             logout.setVisibility(View.INVISIBLE);
-
 
         } else {
             //Login dyy
@@ -111,7 +108,6 @@ public class Profile extends AppCompatActivity {
             Glide.with(this).load(pic).into(mfLogo);
 
         }
-
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -41,6 +41,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static com.techease.mensfashion.communication.BaseConfig.BASE_URL;
+
 
 public class ProductsFragment extends AppCompatActivity {
 
@@ -111,7 +113,7 @@ public class ProductsFragment extends AppCompatActivity {
 
 
     private void apicall() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://116.203.128.245/index.php/restapi/collection"
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL + "collectionProducts"
                 , new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
