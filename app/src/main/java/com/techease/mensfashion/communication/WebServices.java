@@ -2,6 +2,7 @@ package com.techease.mensfashion.communication;
 
 import com.techease.mensfashion.communication.response.BaseResponse;
 import com.techease.mensfashion.communication.response.CollectionResponse;
+import com.techease.mensfashion.ui.models.facebookSignUp.FacebookSignUpResponseModel;
 
 import java.util.concurrent.TimeUnit;
 
@@ -25,7 +26,7 @@ public interface WebServices {
             .build();
 
     WebServices SERVICE = new Retrofit.Builder()
-            .baseUrl("http://85.214.88.81/restapi/")
+            .baseUrl("http://116.203.128.245/index.php/restapi/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(WebServices.class);
@@ -54,6 +55,11 @@ public interface WebServices {
     @FormUrlEncoded
     @POST("userliked")
     Call<BaseResponse> likeCollection(@Field("user_id") String userId, @Field("collection_id") int collectionId);
+
+
+    @FormUrlEncoded
+    @POST("signup")
+    Call<FacebookSignUpResponseModel> facebooSignUp(@Field("email") String email);
 
 
 }

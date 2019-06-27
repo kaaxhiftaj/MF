@@ -51,13 +51,11 @@ public class LoginActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     CallbackManager callbackManager;
     LoginButton loginButton;
-    String email;
+    String email, strId;
 
     @BindView(R.id.anonymous)
-    Button anonymous ;
+    Button anonymous;
     private static final String EMAIL = "email";
-
-
 
 
     @Override
@@ -66,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activityt_login);
         sharedPreferences = getSharedPreferences(Configuration.MY_PREF, Context.MODE_PRIVATE);
         Unbinder unbinder = ButterKnife.bind(this);
-        
+
         editor = sharedPreferences.edit();
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
@@ -137,7 +135,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void apicall() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://85.214.88.81/restapi/signup"
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://116.203.128.245/index.php/restapi/signup"
                 , new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -153,7 +151,7 @@ public class LoginActivity extends AppCompatActivity {
                         String email = jsonObject.getString("email");
 
                         editor.putString("token", token);
-                        editor.putString("email",email );
+                        editor.putString("email", email);
                         editor.putString("user_id", user_id);
                         editor.commit();
                         startActivity(new Intent(LoginActivity.this, HomeActivity.class));
@@ -183,6 +181,7 @@ public class LoginActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.d("error",String.valueOf(error.getMessage()));
                 if (alertDialog != null)
                     alertDialog.dismiss();
 
@@ -196,7 +195,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("email", email);
+
+
+                if (email == null) {
+                    params.put("email", strId);
+                } else {
+                    params.put("email", email);
+                }
                 return params;
             }
 
@@ -214,6 +219,12 @@ public class LoginActivity extends AppCompatActivity {
         try {
             Bundle bundle = new Bundle();
             String id = object.getString("id");
+
+            if (object.has("id")) {
+                bundle.putString("email", object.getString("id"));
+                strId = object.getString("id");
+            }
+
             if (object.has("email"))
                 bundle.putString("email", object.getString("email"));
             email = object.getString("email");

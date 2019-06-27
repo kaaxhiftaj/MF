@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -31,6 +32,10 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.techease.mensfashion.R;
+import com.techease.mensfashion.communication.ApiFactory;
+import com.techease.mensfashion.communication.WebServices;
+import com.techease.mensfashion.communication.response.BaseResponse;
+import com.techease.mensfashion.ui.models.facebookSignUp.FacebookSignUpResponseModel;
 import com.techease.mensfashion.utils.AlertsUtils;
 import com.techease.mensfashion.utils.Configuration;
 
@@ -46,6 +51,8 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class Profile extends AppCompatActivity {
 
@@ -53,21 +60,20 @@ public class Profile extends AppCompatActivity {
     SharedPreferences.Editor editor;
     Unbinder unbinder;
     @BindView(R.id.logout)
-    ImageView logout ;
+    ImageView logout;
 
     @BindView(R.id.logoutText)
     TextView logoutText;
 
     @BindView(R.id.mfLogo)
-            ImageView mfLogo;
+    ImageView mfLogo;
 
-    URL profile_pic ;
+    URL profile_pic;
     CallbackManager callbackManager;
     LoginButton loginButton;
-    String email, token, pic;
+    String email, token, pic, strId;
 
     private static final String EMAIL = "email";
-    android.support.v7.app.AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +94,8 @@ public class Profile extends AppCompatActivity {
         loginButton.setReadPermissions(Arrays.asList(EMAIL));
         sharedPreferences = Profile.this.getSharedPreferences(Configuration.MY_PREF, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        token = sharedPreferences.getString("token","");
-        pic = sharedPreferences.getString("pic","");
+        token = sharedPreferences.getString("token", "");
+        pic = sharedPreferences.getString("pic", "");
 
         if (token.equals("")) {
 
@@ -98,7 +104,7 @@ public class Profile extends AppCompatActivity {
             logout.setVisibility(View.INVISIBLE);
 
 
-        }else {
+        } else {
             //Login dyy
 
             loginButton.setVisibility(View.INVISIBLE);
@@ -119,7 +125,6 @@ public class Profile extends AppCompatActivity {
         });
 
 
-
         // Callback registration
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -132,22 +137,23 @@ public class Profile extends AppCompatActivity {
 
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
+
                         Log.i("LoginActivity", response.toString());
                         // Get facebook data from login
                         Bundle bFacebookData = getFacebookData(object);
-                        apicall();
 
+                        if (email == null) {
+                            email = strId;
+                        }
+
+                        facebookSignUpApiCall();
 
                     }
                 });
                 Bundle parameters = new Bundle();
-
                 parameters.putString("fields", "id, email"); // Parámetros que pedimos a facebook
                 request.setParameters(parameters);
-
                 request.executeAsync();
-                apicall();
-
 
             }
 
@@ -162,6 +168,39 @@ public class Profile extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    private void facebookSignUpApiCall() {
+        WebServices webServices = ApiFactory.create();
+
+        Call<FacebookSignUpResponseModel> call = webServices.facebooSignUp(email);
+        call.enqueue(new Callback<FacebookSignUpResponseModel>() {
+            @Override
+            public void onResponse(Call<FacebookSignUpResponseModel> call, retrofit2.Response<FacebookSignUpResponseModel> response) {
+
+                if (response.body() != null) {
+                    //like and unlike done in backend
+                    editor.putString("token", response.body().getUser().getToken()).commit();
+                    editor.putString("email", response.body().getUser().getEmail()).commit();
+                    editor.putString("user_id", response.body().getUser().getUserId()).commit();
+                    editor.putString("pic", String.valueOf(profile_pic)).commit();
+                    finish();
+                    startActivity(new Intent(Profile.this, HomeActivity.class));
+
+                } else {
+                    //todo show failure message
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FacebookSignUpResponseModel> call, Throwable t) {
+                //todo show failure message
+                Toast.makeText(Profile.this, String.valueOf(t.getMessage()), Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
 
@@ -172,98 +211,28 @@ public class Profile extends AppCompatActivity {
     }
 
 
-    private void apicall() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://85.214.88.81/restapi/signup"
-                , new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if (response.contains("true")) {
-                    if (alertDialog != null)
-                        alertDialog.dismiss();
-
-                    JSONObject jsonObject = null;
-                    try {
-                        jsonObject = new JSONObject(response).getJSONObject("user");
-                        String token = jsonObject.getString("token");
-                        String user_id = jsonObject.getString("user_id");
-                        String email = jsonObject.getString("email");
-
-                        editor.putString("token", token);
-                        editor.putString("email",email );
-                        editor.putString("user_id", user_id);
-                        editor.putString("pic", String.valueOf(profile_pic));
-                        editor.commit();
-                        startActivity(new Intent(Profile.this, HomeActivity.class));
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-
-                } else {
-
-                    try {
-                        if (alertDialog != null)
-                            alertDialog.dismiss();
-                        JSONObject jsonObject = new JSONObject(response);
-                        String message = jsonObject.getString("message");
-                        AlertsUtils.showErrorDialog(Profile.this, message);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        if (alertDialog != null)
-                            alertDialog.dismiss();
-                    }
-                }
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if (alertDialog != null)
-                    alertDialog.dismiss();
-
-            }
-        }) {
-            @Override
-            public String getBodyContentType() {
-                return "application/x-www-form-urlencoded;charset=UTF-8";
-            }
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("email", email);
-                return params;
-            }
-
-        };
-        RequestQueue mRequestQueue = Volley.newRequestQueue(Profile.this);
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(20000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        mRequestQueue.add(stringRequest);
-    }
-
 
     private Bundle getFacebookData(JSONObject object) {
 
         try {
             Bundle bundle = new Bundle();
             String id = object.getString("id");
+            strId = id;
+
 
             try {
-                 profile_pic = new URL("https://graph.facebook.com/" + id + "/picture?width=160&height=160");
+                profile_pic = new URL("https://graph.facebook.com/" + id + "/picture?width=160&height=160");
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
                 return null;
             }
 
-
             if (object.has("email"))
+
                 bundle.putString("email", object.getString("email"));
             email = object.getString("email");
+
 
             return bundle;
         } catch (JSONException e) {
@@ -272,4 +241,4 @@ public class Profile extends AppCompatActivity {
         return null;
     }
 
-    }
+}

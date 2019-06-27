@@ -111,7 +111,7 @@ public class ProductsFragment extends AppCompatActivity {
 
 
     private void apicall() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://85.214.88.81/restapi/collectionProducts"
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://116.203.128.245/index.php/restapi/collection"
                 , new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
