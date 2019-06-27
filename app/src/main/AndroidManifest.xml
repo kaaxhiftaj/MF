@@ -24,9 +24,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.techease.mensfashion.ui.activities.LoginActivity"
-            android:theme="@style/FullScreen" />
-        <activity
             android:name="com.techease.mensfashion.ui.fragments.ProductsFragment"
             android:theme="@style/AppTheme" />
         <activity

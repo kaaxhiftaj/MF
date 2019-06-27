@@ -3,6 +3,7 @@ package com.techease.mensfashion.communication;
 import com.techease.mensfashion.communication.response.BaseResponse;
 import com.techease.mensfashion.communication.response.CollectionResponse;
 import com.techease.mensfashion.ui.models.facebookSignUp.FacebookSignUpResponseModel;
+import com.techease.mensfashion.ui.models.productsModel.CollectionProductsResponseModel;
 
 import java.util.concurrent.TimeUnit;
 
@@ -60,6 +61,11 @@ public interface WebServices {
     @FormUrlEncoded
     @POST("signup")
     Call<FacebookSignUpResponseModel> facebooSignUp(@Field("email") String email);
+
+
+    @FormUrlEncoded
+    @POST("collectionProducts")
+    Call<CollectionProductsResponseModel> collectionProducts(@Field("collection_id") String collection_id);
 
 
 }

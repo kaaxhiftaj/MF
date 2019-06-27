@@ -11,15 +11,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -34,11 +25,8 @@ import com.facebook.login.widget.LoginButton;
 import com.techease.mensfashion.R;
 import com.techease.mensfashion.communication.ApiFactory;
 import com.techease.mensfashion.communication.WebServices;
-import com.techease.mensfashion.communication.response.BaseResponse;
 import com.techease.mensfashion.ui.models.facebookSignUp.FacebookSignUpResponseModel;
-import com.techease.mensfashion.utils.AlertsUtils;
 import com.techease.mensfashion.utils.Configuration;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 

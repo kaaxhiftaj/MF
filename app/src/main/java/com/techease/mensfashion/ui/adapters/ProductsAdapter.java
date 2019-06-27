@@ -10,23 +10,13 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.techease.mensfashion.R;
 import com.techease.mensfashion.ui.activities.WebviewActivity;
-import com.techease.mensfashion.ui.models.ProductsModel;
+import com.techease.mensfashion.ui.models.productsModel.CollectionDataModel;
 import com.techease.mensfashion.utils.Configuration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by kaxhiftaj on 3/6/18.
@@ -34,16 +24,16 @@ import java.util.Map;
 
 public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyViewHolder> {
 
-    ArrayList<ProductsModel> productArrayList;
+    ArrayList<CollectionDataModel> productArrayList;
     Context context;
     String collection_id;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
-    String user_id ;
+    String user_id;
 
-    public ProductsAdapter(Context context, ArrayList<ProductsModel> productModels) {
-        this.context=context;
-        this.productArrayList = productModels ;
+    public ProductsAdapter(Context context, ArrayList<CollectionDataModel> productModels) {
+        this.context = context;
+        this.productArrayList = productModels;
     }
 
     @Override
@@ -59,7 +49,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyView
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        final ProductsModel model= productArrayList.get(position);
+        final CollectionDataModel model = productArrayList.get(position);
 
         holder.price.setText(model.getPrice());
         Glide.with(context).load(model.getImage()).into(holder.image);
@@ -68,9 +58,9 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyView
             @Override
             public void onClick(View v) {
 
-                String collection_id = model.getId();
+                String collection_id = String.valueOf(model.getId());
 
-                Intent i = new Intent(context ,WebviewActivity.class);
+                Intent i = new Intent(context, WebviewActivity.class);
                 i.putExtra("link", model.getLink());
                 context.startActivity(i);
             }
@@ -89,13 +79,13 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyView
 
 
         TextView price;
-        ImageView image ;
+        ImageView image;
         ImageButton amzaon;
 
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            price =(TextView)itemView.findViewById(R.id.product_price);
+            price = (TextView) itemView.findViewById(R.id.product_price);
             amzaon = (ImageButton) itemView.findViewById(R.id.amazon);
             image = (ImageView) itemView.findViewById(R.id.product_image);
 
@@ -105,45 +95,5 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyView
     }
 
 
-
-
-    private void apicall() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://85.214.88.81/restapi/userliked"
-                , new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if (response.contains("true")) {
-
-                    Toast.makeText(context, "Liked", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-
-            }
-        }) {
-            @Override
-            public String getBodyContentType() {
-                return "application/x-www-form-urlencoded;charset=UTF-8";
-            }
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("user_id", "user_id");
-                params.put("collection_id", collection_id);
-                return params;
-            }
-
-        };
-        RequestQueue mRequestQueue = Volley.newRequestQueue(context);
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(20000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        mRequestQueue.add(stringRequest);
-    }
 }
 
