@@ -1,45 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
-
-    <android.support.v7.widget.CardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cardViewCustomPesh_FD"
         android:layout_width="match_parent"
-        android:layout_height="450sp"
+        android:layout_height="@dimen/card_view_height"
         android:clickable="true"
         card_view:cardCornerRadius="10dp"
         card_view:cardPreventCornerOverlap="true"
-        card_view:cardUseCompatPadding="true"
-        android:id="@+id/cardViewCustomPesh_FD">
+        card_view:cardUseCompatPadding="true">
 
         <ImageView
             android:id="@+id/item_image"
-            android:layout_width="match_parent"
-            android:layout_height="395dp"
-            android:scaleType="fitXY"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="@dimen/imaage_view_height"/>
 
-            />
         <LinearLayout
-            android:layout_gravity="bottom"
-            android:gravity="start|center"
-            android:layout_width="match_parent"
-            android:layout_height="45sp"
             android:id="@+id/likeLayout"
-            android:background="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/like_layout_height"
+            android:layout_gravity="bottom"
+            android:background="#535c68"
+            android:gravity="start|center"
             android:orientation="horizontal">
 
-
             <LinearLayout
-                android:layout_marginLeft="30sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="30sp"
                 android:orientation="vertical">
 
                 <TextView
@@ -47,10 +41,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/likes"
-                    android:textSize="18sp"
                     android:textColor="#FFF"
-                    android:textStyle="bold"/>
-
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -59,28 +52,23 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginRight="15dp"
-                android:gravity="right"
-                >
+                android:gravity="right">
 
                 <ImageButton
                     android:id="@+id/like"
-                    android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:src="@drawable/like"
-                    android:background="@color/colorPrimary"
-                    />
+                    android:layout_height="wrap_content"
+                    android:background="#535c68"
+                    android:src="@drawable/like" />
 
                 <ImageButton
                     android:id="@+id/share"
-                    android:layout_marginLeft="10dp"
-                    android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="@color/colorPrimary"
-                    android:src="@drawable/share"
-                    />
-
-
+                    android:layout_marginLeft="10dp"
+                    android:background="#535c68"
+                    android:src="@drawable/share" />
 
             </LinearLayout>
 

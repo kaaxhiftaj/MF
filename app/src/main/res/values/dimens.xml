@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="card_view_height">700dp</dimen>
+    <dimen name="imaage_view_height">660dp</dimen>
+    <dimen name="like_layout_height">50dp</dimen>
+</resources>

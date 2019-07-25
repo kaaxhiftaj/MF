@@ -28,7 +28,6 @@ import com.techease.mensfashion.ui.models.facebookSignUp.FacebookSignUpResponseM
 import com.techease.mensfashion.utils.Configuration;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import butterknife.BindView;
